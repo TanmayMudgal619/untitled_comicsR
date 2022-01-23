@@ -54,7 +54,6 @@ Future<List<Manga>> getmangalisttag(
       "includes[]": ["author", "artist", "cover_art"],
     });
   }
-  print("object");
   var response = await https.get(url);
   if (response.statusCode == 200) {
     var jsonR = json.decode(response.body);

@@ -26,7 +26,10 @@ class _MangaPageState extends State<MangaPage> {
   late Future<List<Manga>> basedManga;
   int currentIndexL = 0;
   int currentIndexP = 0;
-  MangaChapter mangaChapters = MangaChapter();
+  late MangaChapter mangaChapters;
+  late Future<List<MangaChapterData>> chaptersLoading;
+  List<MangaChapterData> chaptersLoaded = [];
+  int offset = 0;
 
   @override
   void initState() {
@@ -38,6 +41,11 @@ class _MangaPageState extends State<MangaPage> {
 
     chaptersLoading =
         getChapters(widget.mangaOpened.id, 100, offset, "asc", "asc", "en");
+
+    mangaChapters = MangaChapter(
+        chaptersLoading: chaptersLoading,
+        chaptersLoaded: chaptersLoaded,
+        offset: offset);
 
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
         widget.mangaOpened.publicationDemographic, '20');
@@ -505,7 +513,15 @@ class _MangaBasedState extends State<MangaBased> {
 }
 
 class MangaChapter extends StatelessWidget {
-  const MangaChapter({Key? key}) : super(key: key);
+  Future<List<MangaChapterData>> chaptersLoading;
+  List<MangaChapterData> chaptersLoaded;
+  int offset;
+  MangaChapter(
+      {Key? key,
+      required this.chaptersLoading,
+      required this.chaptersLoaded,
+      required this.offset})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

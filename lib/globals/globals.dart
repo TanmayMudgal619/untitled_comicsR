@@ -23,6 +23,3 @@ Map<String, List<String>> comicstatus = {
 };
 late Orientation deviceMode;
 late Size size;
-late Future<List<MangaChapterData>> chaptersLoading;
-List<MangaChapterData> chaptersLoaded = [];
-int offset = 0;
