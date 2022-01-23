@@ -284,13 +284,19 @@ class _MangaBodyState extends State<MangaBody> {
       ));
     }
     TabData.addAll([
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: widget.mangaChapters,
+      Container(
+        color: Colors.black26,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: widget.mangaChapters,
+        ),
       ),
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: MangaBased(),
+      Container(
+        color: Colors.black26,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: MangaBased(),
+        ),
       )
     ]);
     currentIndex = (deviceMode == Orientation.landscape)
@@ -512,19 +518,29 @@ class MangaChapter extends StatelessWidget {
                 children: chaptersLoaded
                     .map((e) => Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            tileColor: Colors.black12,
-                            title: Text(
-                              (e.title.isEmpty)
-                                  ? ("Chapter ${e.chapter}")
-                                  : (e.title),
-                              style: TextStyle(color: Colors.white),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  10,
+                                ),
+                              ),
                             ),
-                            isThreeLine: true,
-                            subtitle: Text(
-                              "Chapter: ${e.chapter}\nVolume: ${e.volume}",
-                              style: TextStyle(
-                                color: Colors.white54,
+                            child: ListTile(
+                              onTap: () {},
+                              title: Text(
+                                (e.title.isEmpty)
+                                    ? ("Chapter ${e.chapter}")
+                                    : (e.title),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              isThreeLine: true,
+                              subtitle: Text(
+                                "Chapter: ${e.chapter}\nVolume: ${e.volume}",
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                ),
                               ),
                             ),
                           ),
