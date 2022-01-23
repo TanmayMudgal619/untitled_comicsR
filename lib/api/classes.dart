@@ -126,7 +126,7 @@ class MangaChapterData {
     }
     return MangaChapterData(
         id: json['id'],
-        title: json['attributes']['title'],
+        title: json['attributes']['title'].toString(),
         lang: json['attributes']['translatedLanguage'].toString(),
         chapter: json['attributes']['chapter'].toString(),
         volume: json['attributes']['volume'].toString(),

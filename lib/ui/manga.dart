@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,6 +8,7 @@ import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/ui/mangatile.dart';
 import 'helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'mangachapter.dart';
 
 class MangaPage extends StatefulWidget {
   final Manga mangaOpened;
@@ -24,13 +23,9 @@ class _MangaPageState extends State<MangaPage> {
   late MangaInfo mangaInfo;
   late MangaBased mangaBased;
   late Future<List<Manga>> basedManga;
+  late MangaPageChapter mangaPageChapter;
   int currentIndexL = 0;
   int currentIndexP = 0;
-  late MangaChapter mangaChapters;
-  late Future<List<MangaChapterData>> chaptersLoading;
-  List<MangaChapterData> chaptersLoaded = [];
-  int offset = 0;
-
   @override
   void initState() {
     mangaHeader = MangaHeader(manga: widget.mangaOpened);
@@ -39,14 +34,6 @@ class _MangaPageState extends State<MangaPage> {
       manga: widget.mangaOpened,
     );
 
-    chaptersLoading =
-        getChapters(widget.mangaOpened.id, 100, offset, "asc", "asc", "en");
-
-    mangaChapters = MangaChapter(
-        chaptersLoading: chaptersLoading,
-        chaptersLoaded: chaptersLoaded,
-        offset: offset);
-
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
         widget.mangaOpened.publicationDemographic, '20');
 
@@ -54,14 +41,9 @@ class _MangaPageState extends State<MangaPage> {
       basedManga: basedManga,
     );
 
-    super.initState();
-  }
+    mangaPageChapter = MangaPageChapter(id: widget.mangaOpened.id);
 
-  @override
-  void dispose() {
-    chaptersLoaded.clear();
-    offset = 0;
-    super.dispose();
+    super.initState();
   }
 
   @override
@@ -70,7 +52,7 @@ class _MangaPageState extends State<MangaPage> {
     size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        Container(
+        SizedBox(
           width: size.width,
           height: size.height,
           child: CachedNetworkImage(
@@ -84,7 +66,7 @@ class _MangaPageState extends State<MangaPage> {
             backgroundColor: Colors.black54,
             middle: Text(
               widget.mangaOpened.title,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           body: (deviceMode == Orientation.landscape)
@@ -93,10 +75,11 @@ class _MangaPageState extends State<MangaPage> {
                     (Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
+                          child: SizedBox(
                             width: 350,
                             child: Drawer(
                               backgroundColor: Colors.black26,
@@ -120,13 +103,14 @@ class _MangaPageState extends State<MangaPage> {
                         child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: MangaBody(
                             tabs: const ["Chapter", "Based"],
                             mangaInfo: mangaInfo,
-                            mangaChapters: mangaChapters,
+                            mangaChapters: mangaPageChapter,
                             mangaBased: mangaBased,
                             currentIndexL: currentIndexL,
                             currentIndexP: currentIndexP,
@@ -159,7 +143,7 @@ class _MangaPageState extends State<MangaPage> {
                       body: MangaBody(
                         tabs: const ["Info", "Chapters", "Based"],
                         mangaInfo: mangaInfo,
-                        mangaChapters: mangaChapters,
+                        mangaChapters: mangaPageChapter,
                         mangaBased: mangaBased,
                         currentIndexL: currentIndexL,
                         currentIndexP: currentIndexP,
@@ -223,7 +207,7 @@ class MangaHeader extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                   ),
                   Text(
-                    "Volume: ${(manga.lastchapter.isEmpty) ? ('N/A') : (manga.lastchapter)}",
+                    "Chapter: ${(manga.lastchapter.isEmpty) ? ('N/A') : (manga.lastchapter)}",
                     style: const TextStyle(color: Colors.white),
                   ),
                   const Padding(
@@ -506,83 +490,6 @@ class _MangaBasedState extends State<MangaBased> {
                 itemBuilder: (context, val) {
                   return MangaTile(manga: snapshot.data![val]);
                 });
-        }
-      },
-    );
-  }
-}
-
-class MangaChapter extends StatelessWidget {
-  Future<List<MangaChapterData>> chaptersLoading;
-  List<MangaChapterData> chaptersLoaded;
-  int offset;
-  MangaChapter(
-      {Key? key,
-      required this.chaptersLoading,
-      required this.chaptersLoaded,
-      required this.offset})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<MangaChapterData>>(
-      future: chaptersLoading,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return CircularProgressIndicator();
-          default:
-            if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            } else {
-              if (chaptersLoaded.length == offset) {
-                chaptersLoaded.addAll(snapshot.data!);
-                offset += 100;
-              }
-              if (chaptersLoaded.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No Chapters For Translated Language!",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
-              return ListView(
-                children: chaptersLoaded
-                    .map((e) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  10,
-                                ),
-                              ),
-                            ),
-                            child: ListTile(
-                              onTap: () {},
-                              title: Text(
-                                (e.title.isEmpty)
-                                    ? ("Chapter ${e.chapter}")
-                                    : (e.title),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              isThreeLine: true,
-                              subtitle: Text(
-                                "Chapter: ${e.chapter}\nVolume: ${e.volume}",
-                                style: TextStyle(
-                                  color: Colors.white54,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ))
-                    .toList(),
-              );
-            }
         }
       },
     );
