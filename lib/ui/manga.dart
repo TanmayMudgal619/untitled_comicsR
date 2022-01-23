@@ -353,7 +353,7 @@ class _MangaBodyState extends State<MangaBody> {
     if (deviceMode == Orientation.portrait) {
       TabData.add(Padding(
         padding: const EdgeInsets.all(10.0),
-        child: widget.mangaInfo,
+        child: SingleChildScrollView(child: widget.mangaInfo),
       ));
     }
     TabData.addAll([
