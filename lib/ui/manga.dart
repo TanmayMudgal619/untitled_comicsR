@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
+import 'package:untitledcomics/ui/mangatile.dart';
 import 'helper.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -24,10 +25,14 @@ class MangaPage extends StatefulWidget {
 class _MangaPageState extends State<MangaPage> {
   late MangaHeader mangaHeader;
   late MangaInfo mangaInfo;
+  late MangaBased mangaBased;
   MangaChapter mangaChapters = MangaChapter();
 
   @override
   void initState() {
+    currentIndexL = 0;
+    currentIndexP = 0;
+
     mangaHeader = MangaHeader(manga: widget.mangaOpened);
 
     mangaInfo = MangaInfo(
@@ -37,7 +42,19 @@ class _MangaPageState extends State<MangaPage> {
     chaptersLoading =
         getChapters(widget.mangaOpened.id, 100, offset, "asc", "asc", "en");
 
+    basedManga = getmangalisttag(widget.mangaOpened.genrei,
+        widget.mangaOpened.publicationDemographic, '20');
+
+    mangaBased = MangaBased();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    chaptersLoaded.clear();
+    offset = 0;
+    super.dispose();
   }
 
   @override
@@ -100,55 +117,9 @@ class _MangaPageState extends State<MangaPage> {
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: MangaBody(
-                            tabs: ["Chapter", "Based"],
-                            mangaInfo: mangaInfo,
-                            mangaChapters:
-                                FutureBuilder<List<MangaChapterData>>(
-                              future: chaptersLoading,
-                              builder: (context, snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.active:
-                                  case ConnectionState.none:
-                                  case ConnectionState.waiting:
-                                    return CircularProgressIndicator();
-                                  default:
-                                    if (snapshot.hasError) {
-                                      return Center(
-                                          child:
-                                              Text(snapshot.error.toString()));
-                                    } else {
-                                      if (chaptersLoaded.length == offset) {
-                                        chaptersLoaded.addAll(snapshot.data!);
-                                        offset += 100;
-                                      }
-                                      return ListView(
-                                        children: chaptersLoaded
-                                            .map((e) => Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: ListTile(
-                                                    tileColor: Colors.black12,
-                                                    title: Text(
-                                                      e.title,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    isThreeLine: true,
-                                                    subtitle: Text(
-                                                      "Chapter: ${e.chapter}\nVolume: ${e.volume}",
-                                                      style: TextStyle(
-                                                        color: Colors.white54,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ))
-                                            .toList(),
-                                      );
-                                    }
-                                }
-                              },
-                            ),
-                          ),
+                              tabs: const ["Chapter", "Based"],
+                              mangaInfo: mangaInfo,
+                              mangaChapters: mangaChapters),
                         ),
                       ),
                     ))
@@ -175,53 +146,9 @@ class _MangaPageState extends State<MangaPage> {
                         ];
                       },
                       body: MangaBody(
-                        tabs: ["Info", "Chapters", "Based"],
-                        mangaInfo: mangaInfo,
-                        mangaChapters: FutureBuilder<List<MangaChapterData>>(
-                          future: chaptersLoading,
-                          builder: (context, snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.active:
-                              case ConnectionState.none:
-                              case ConnectionState.waiting:
-                                return CircularProgressIndicator();
-                              default:
-                                if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text(snapshot.error.toString()));
-                                } else {
-                                  if (chaptersLoaded.length == offset) {
-                                    chaptersLoaded.addAll(snapshot.data!);
-                                    offset += 100;
-                                  }
-                                  return ListView(
-                                    children: chaptersLoaded
-                                        .map((e) => Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ListTile(
-                                                tileColor: Colors.black12,
-                                                title: Text(
-                                                  e.title,
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                isThreeLine: true,
-                                                subtitle: Text(
-                                                  "Chapter: ${e.chapter}\nVolume: ${e.volume}",
-                                                  style: TextStyle(
-                                                    color: Colors.white54,
-                                                  ),
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                  );
-                                }
-                            }
-                          },
-                        ),
-                      ),
+                          tabs: const ["Info", "Chapters", "Based"],
+                          mangaInfo: mangaInfo,
+                          mangaChapters: mangaChapters),
                     ),
                   ),
                 ),
@@ -451,7 +378,7 @@ class MangaInfo extends StatelessWidget {
                         ),
                         color: Colors.black12,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
+                          padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
                           child: Text(
                             e,
                             style: TextStyle(
@@ -484,7 +411,8 @@ class MangaInfo extends StatelessWidget {
                               ),
                               color: Colors.black12,
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 7, 10, 7),
                                 child: Text(
                                   e,
                                   style: TextStyle(
@@ -502,13 +430,51 @@ class MangaInfo extends StatelessWidget {
   }
 }
 
-class MangaBased extends StatelessWidget {
+class MangaBased extends StatefulWidget {
   const MangaBased({Key? key}) : super(key: key);
 
   @override
+  State<MangaBased> createState() => _MangaBasedState();
+}
+
+class _MangaBasedState extends State<MangaBased> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("kajhshav"),
+    size = MediaQuery.of(context).size;
+    return FutureBuilder<List<Manga>>(
+      future: basedManga,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.active:
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return CircularProgressIndicator();
+          default:
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  style: TextStyle(color: Colors.white54),
+                ),
+              );
+            }
+            return GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ((deviceMode == Orientation.landscape)
+                          ? (size.width - size.width * 0.35)
+                          : (size.width)) ~/
+                      105,
+                  childAspectRatio: 105 / 160,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                ),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, val) {
+                  return MangaTile(manga: snapshot.data![val]);
+                });
+        }
+      },
     );
   }
 }
@@ -518,8 +484,56 @@ class MangaChapter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("HAHA"),
+    return FutureBuilder<List<MangaChapterData>>(
+      future: chaptersLoading,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.active:
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return CircularProgressIndicator();
+          default:
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            } else {
+              if (chaptersLoaded.length == offset) {
+                chaptersLoaded.addAll(snapshot.data!);
+                offset += 100;
+              }
+              if (chaptersLoaded.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No Chapters For Translated Language!",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+              return ListView(
+                children: chaptersLoaded
+                    .map((e) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            tileColor: Colors.black12,
+                            title: Text(
+                              (e.title.isEmpty)
+                                  ? ("Chapter ${e.chapter}")
+                                  : (e.title),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            isThreeLine: true,
+                            subtitle: Text(
+                              "Chapter: ${e.chapter}\nVolume: ${e.volume}",
+                              style: TextStyle(
+                                color: Colors.white54,
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              );
+            }
+        }
+      },
     );
   }
 }

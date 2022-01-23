@@ -26,3 +26,4 @@ late Size size;
 late Future<List<MangaChapterData>> chaptersLoading;
 List<MangaChapterData> chaptersLoaded = [];
 int offset = 0;
+late Future<List<Manga>> basedManga;
