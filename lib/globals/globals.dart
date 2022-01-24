@@ -13,13 +13,18 @@ late bool dataSaver;
 late List<Manga> latestManga;
 late List<Manga> updatedManga;
 late List<Manga> slideshowManga;
-Map<String, List<String>> comicstatus = {
+late Map<String, dynamic> library;
+
+Map<String, List<String>> allComics = {
   "reading": [],
   "on_hold": [],
   "plan_to_read": [],
   "dropped": [],
   "re_reading": [],
-  "completed": []
+  "completed": [],
 };
+bool allComicsLoaded = false;
+Map<String, Map<String, dynamic>> allStatus = {};
+
 late Orientation deviceMode;
 late Size size;

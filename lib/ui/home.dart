@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/api/classes.dart';
 import 'homepage.dart';
 
 class Home extends StatefulWidget {
@@ -12,13 +14,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 2;
+
+  @override
+  void initState() {
+    getlibrary().whenComplete(() {
+      setState(() {
+        allComicsLoaded = true;
+        print("OK");
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        Container(
+        SizedBox(
           width: size.width,
           height: size.height,
           child: Image.asset(

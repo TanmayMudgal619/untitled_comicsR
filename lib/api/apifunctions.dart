@@ -318,17 +318,21 @@ Future<Map<String, dynamic>> loginUser(var username, var password) async {
   }
 }
 
-Future<Map<String, dynamic>> getalls() async {
+Future<Map<String, dynamic>> getlibrary() async {
   var url = Uri.https("api.mangadex.org", "/manga/status");
   var response = await https.get(url,
       headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.token}"});
   if (response.statusCode == 200) {
+    print("done");
     return jsonDecode(response.body)["statuses"];
   } else if (login) {
+    print(response.statusCode);
     var newt = await refresh();
     sharedPreferences.setString("session", newt["session"]);
     sharedPreferences.setString("refresh", newt["refresh"]);
-    return await getalls();
+    usr.token = newt["session"];
+    usr.refresh = newt["refresh"];
+    return await getlibrary();
   } else {
     throw Exception("Error Code : ${response.statusCode}");
   }

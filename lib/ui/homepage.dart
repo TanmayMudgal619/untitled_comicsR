@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitledcomics/ui/library.dart';
 import 'helper.dart';
 import 'package:untitledcomics/globals/globals.dart';
 
@@ -28,12 +29,7 @@ List<Widget> potraitMode = [
       ),
     ),
   ),
-  Container(
-    child: const Text(
-      "Library",
-      style: TextStyle(color: Colors.white),
-    ),
-  ),
+  Library(),
   Container(
     child: const Text(
       "Settings",

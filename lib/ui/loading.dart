@@ -6,7 +6,6 @@ import 'package:untitledcomics/globals/globals.dart';
 import 'home.dart';
 
 class Loading extends StatefulWidget {
-  //To Load New Comics Updates for The home Page
   const Loading({Key? key}) : super(key: key);
 
   @override
