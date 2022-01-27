@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'user_choice.dart';
@@ -23,7 +24,6 @@ Map<String, List<String>> allComics = {
   "re_reading": [],
   "completed": [],
 };
-bool allComicsLoaded = false;
 Map<String, Map<String, dynamic>> allStatus = {};
 
 late Orientation deviceMode;

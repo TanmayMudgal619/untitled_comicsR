@@ -25,34 +25,30 @@ class _LibraryState extends State<Library> {
               "scroll": null,
             }))
         .toList());
-    if (allComicsLoaded) {
-      allStatus.entries.forEach((element) {
-        element.value["scroll"] = ScrollController();
-        if (element.value["data"] != null) {
-          getmangalist(
-                  element.value["data"].sublist(
-                      0,
-                      (element.value["data"].length - element.value["off"] >=
-                              100)
-                          ? (100)
-                          : (null)),
-                  '100')
-              .then((value) {
-            setState(() {
-              element.value["loaded"].addAll(value);
-              if (value.length < 100) {
-                element.value["next"] = false;
-              }
-            });
-          });
-        } else {
+    allStatus.entries.forEach((element) {
+      element.value["scroll"] = ScrollController();
+      if (element.value["data"] != null) {
+        getmangalist(
+                element.value["data"].sublist(
+                    0,
+                    (element.value["data"].length - element.value["off"] >= 100)
+                        ? (100)
+                        : (null)),
+                '100')
+            .then((value) {
           setState(() {
-            print("else");
-            element.value["next"] = false;
+            element.value["loaded"].addAll(value);
+            if (value.length < 100) {
+              element.value["next"] = false;
+            }
           });
-        }
-      });
-    }
+        });
+      } else {
+        setState(() {
+          element.value["next"] = false;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -72,7 +68,6 @@ class _LibraryState extends State<Library> {
                   .map((e) => Tab(
                         child: Text(
                           e.replaceAll("_", " ").toUpperCase(),
-                          style: const TextStyle(color: Colors.white),
                         ),
                       ))
                   .toList(),
@@ -81,12 +76,9 @@ class _LibraryState extends State<Library> {
                 fit: FlexFit.loose,
                 child: TabBarView(
                   children: allStatus.values.toList().map((e) {
-                    if (!allComicsLoaded) {
-                      return const CircularProgressIndicator();
-                    }
                     if (e["loaded"].isEmpty) {
                       if (e["next"]) {
-                        return const CircularProgressIndicator();
+                        return const Center(child: CircularProgressIndicator());
                       } else {
                         return const Text("Nothing Here!");
                       }
@@ -99,8 +91,8 @@ class _LibraryState extends State<Library> {
                                   : (size.width)) ~/
                               105,
                           childAspectRatio: 105 / 160,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 10,
                         ),
                         itemCount: e["loaded"].length,
                         itemBuilder: (context, val) {

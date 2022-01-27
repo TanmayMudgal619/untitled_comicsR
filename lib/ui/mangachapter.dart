@@ -47,7 +47,6 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.black12,
                             borderRadius: BorderRadius.all(
                               Radius.circular(
                                 10,
@@ -60,14 +59,10 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                               (e.title.isEmpty || e.title == "null")
                                   ? ("Chapter ${e.chapter}")
                                   : (e.title),
-                              style: const TextStyle(color: Colors.white),
                             ),
                             isThreeLine: true,
                             subtitle: Text(
                               "Chapter: ${e.chapter}\nVolume: ${e.volume}",
-                              style: const TextStyle(
-                                color: Colors.white54,
-                              ),
                             ),
                           ),
                         ),
@@ -80,9 +75,12 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                   ),
                   child: ListTile(
                     leading: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      decoration: BoxDecoration(
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? (Colors.black87)
+                            : (Colors.grey[100]!),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                       ),
                       child: IconButton(
                         onPressed: (widget.prev)
@@ -98,16 +96,22 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                 });
                               })
                             : (null),
-                        icon: const Icon(
+                        icon: Icon(
                           CupertinoIcons.lessthan,
-                          color: Colors.white,
+                          color:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? (Colors.white)
+                                  : (Colors.black),
                         ),
                       ),
                     ),
                     trailing: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      decoration: BoxDecoration(
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? (Colors.black87)
+                            : (Colors.grey[100]!),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
                       ),
                       child: IconButton(
                         onPressed: (widget.next)
@@ -120,9 +124,12 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                 });
                               })
                             : (null),
-                        icon: const Icon(
+                        icon: Icon(
                           CupertinoIcons.greaterthan,
-                          color: Colors.white,
+                          color:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? (Colors.white)
+                                  : (Colors.black),
                         ),
                       ),
                     ),
@@ -130,6 +137,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                 ),
               );
               return ListView(
+                primary: false,
                 children: show,
               );
             }

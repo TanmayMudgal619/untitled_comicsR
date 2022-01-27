@@ -38,15 +38,12 @@ class Manga {
     var de = json["attributes"]["description"];
     var dm = (de.toString() == "[]")
         ? ("Read & Find!")
-        : (((de["en"] == null) ? (de[de.entries.toList()[0].key]) : (de["en"]))
-            .replaceAllMapped(RegExp(r"\[(/)?\w+\]"), (match) => '')
-            .replaceAllMapped(RegExp(r"\[url(.+)]"), (match) => ''));
+        : (((de["en"] == null)
+            ? (de[de.entries.toList()[0].key])
+            : (de["en"])));
     var d = (de.toString() == "[]")
         ? ("Read & Find!")
-        : (de.values
-            .reduce((e, f) => e + "\n\n" + f)
-            .replaceAllMapped(RegExp(r"\[(/)?\w+\]"), (match) => '')
-            .replaceAllMapped(RegExp(r"\[url(.+)]"), (match) => ''));
+        : (de.values.reduce((e, f) => e + "\n\n" + f));
     for (var i in json["relationships"]) {
       if (i["type"] == "cover_art") {
         json["cover"] =

@@ -22,12 +22,26 @@ class _LoadingState extends State<Loading> {
       latestManga = value[0];
       updatedManga = value[1];
       slideshowManga = value[2];
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
+      if (login) {
+        getlibrary().then((value) {
+          value.forEach((key, value) {
+            allComics[value]!.add(key);
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Home(),
+            ),
+          );
+        });
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(),
+          ),
+        );
+      }
     });
   }
 
@@ -36,19 +50,11 @@ class _LoadingState extends State<Loading> {
     deviceMode = MediaQuery.of(context).orientation;
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        height: size.height,
-        width: size.width,
-        color: Colors.black,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/logo.png",
-              fit: BoxFit.scaleDown,
-            ),
-          ],
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Image.asset(
+          "assets/images/logo.png",
+          fit: BoxFit.scaleDown,
         ),
       ),
     );

@@ -35,7 +35,7 @@ class _MangaPageState extends State<MangaPage> {
     );
 
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
-        widget.mangaOpened.publicationDemographic, '20');
+        widget.mangaOpened.publicationDemographic, '25');
 
     mangaBased = MangaBased(
       basedManga: basedManga,
@@ -50,109 +50,81 @@ class _MangaPageState extends State<MangaPage> {
   Widget build(BuildContext context) {
     deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        SizedBox(
-          width: size.width,
-          height: size.height,
-          child: CachedNetworkImage(
-            imageUrl: widget.mangaOpened.cover,
-            fit: BoxFit.cover,
-          ),
+    return Scaffold(
+      appBar: CupertinoNavigationBar(
+        middle: Text(
+          widget.mangaOpened.title,
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: CupertinoNavigationBar(
-            backgroundColor: Colors.black54,
-            middle: Text(
-              widget.mangaOpened.title,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-          body: (deviceMode == Orientation.landscape)
-              ? Row(
-                  children: [
-                    (Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: SizedBox(
-                            width: 350,
-                            child: Drawer(
-                              backgroundColor: Colors.black26,
-                              child: ListView(
-                                primary: false,
-                                children: [
-                                  mangaHeader,
-                                  const Padding(padding: EdgeInsets.all(5)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: mangaInfo,
-                                  ),
-                                ],
-                              ),
+      ),
+      body: (deviceMode == Orientation.landscape)
+          ? Row(
+              children: [
+                (Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: SizedBox(
+                      width: 350,
+                      child: Drawer(
+                        child: ListView(
+                          primary: false,
+                          children: [
+                            mangaHeader,
+                            const Padding(padding: EdgeInsets.all(5)),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: mangaInfo,
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    )),
-                    Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: MangaBody(
-                            tabs: const ["Chapter", "Based"],
-                            mangaInfo: mangaInfo,
-                            mangaChapters: mangaPageChapter,
-                            mangaBased: mangaBased,
-                            currentIndexL: currentIndexL,
-                            currentIndexP: currentIndexP,
-                          ),
-                        ),
-                      ),
-                    ))
-                  ],
-                )
-              : Container(
-                  width: size.width,
-                  color: Colors.black26,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: NestedScrollView(
-                      headerSliverBuilder: (context, val) {
-                        return [
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                right: 10,
-                                top: 10,
-                              ),
-                              child: mangaHeader,
-                            ),
-                          ),
-                        ];
-                      },
-                      body: MangaBody(
-                        tabs: const ["Info", "Chapters", "Based"],
-                        mangaInfo: mangaInfo,
-                        mangaChapters: mangaPageChapter,
-                        mangaBased: mangaBased,
-                        currentIndexL: currentIndexL,
-                        currentIndexP: currentIndexP,
                       ),
                     ),
                   ),
+                )),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: MangaBody(
+                      tabs: const ["Chapter", "Based"],
+                      mangaInfo: mangaInfo,
+                      mangaChapters: mangaPageChapter,
+                      mangaBased: mangaBased,
+                      currentIndexL: currentIndexL,
+                      currentIndexP: currentIndexP,
+                    ),
+                  ),
+                ))
+              ],
+            )
+          : Container(
+              width: size.width,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, val) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 10,
+                        ),
+                        child: mangaHeader,
+                      ),
+                    ),
+                  ];
+                },
+                body: MangaBody(
+                  tabs: const ["Info", "Chapters", "Based"],
+                  mangaInfo: mangaInfo,
+                  mangaChapters: mangaPageChapter,
+                  mangaBased: mangaBased,
+                  currentIndexL: currentIndexL,
+                  currentIndexP: currentIndexP,
                 ),
-        )
-      ],
+              ),
+            ),
     );
   }
 }
@@ -165,92 +137,128 @@ class MangaHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10),
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(
+                manga.cover,
+              ),
+              fit: BoxFit.cover,
             ),
-            child: CachedNetworkImage(
-              imageUrl: manga.cover,
-              width: 130,
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    manga.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    manga.authors.join(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    manga.artists.join(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(3),
-                  ),
-                  Text(
-                    "Volume: ${(manga.lastvolume.isEmpty) ? ('N/A') : (manga.lastvolume)}",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    "Chapter: ${(manga.lastchapter.isEmpty) ? ('N/A') : (manga.lastchapter)}",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(3),
-                  ),
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(1000),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      color: Colors.black38,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            size: 12,
-                            color: (manga.status == "ongoing")
-                                ? (Colors.blueAccent)
-                                : ((manga.status == "completed")
-                                    ? (Colors.green)
-                                    : ((manga.status == "hiatus")
-                                        ? (Colors.orange)
-                                        : (Colors.red))),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 3.0),
-                            child: Text(
-                              manga.status.toUpperCase(),
-                              style: const TextStyle(
-                                  fontSize: 11, color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: (Theme.of(context).brightness == Brightness.light)
+                    ? ([Colors.white, Colors.white38, Colors.white])
+                    : ([
+                        const Color(0xFF191A1C),
+                        Colors.black26,
+                        const Color(0xFF191A1C)
+                      ]),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-          )
-        ],
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: manga.cover,
+                    width: 130,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          manga.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          manga.authors.join(),
+                        ),
+                        Text(
+                          manga.artists.join(),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(3),
+                        ),
+                        Text(
+                          "Volume: ${(manga.lastvolume.isEmpty) ? ('N/A') : (manga.lastvolume)}",
+                        ),
+                        Text(
+                          "Chapter: ${(manga.lastchapter.isEmpty) ? ('N/A') : (manga.lastchapter)}",
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(3),
+                        ),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(1000),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            color: Colors.white38,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 12,
+                                  color: (manga.status == "ongoing")
+                                      ? (Colors.blueAccent)
+                                      : ((manga.status == "completed")
+                                          ? (Colors.green)
+                                          : ((manga.status == "hiatus")
+                                              ? (Colors.orange)
+                                              : (Colors.red))),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 3.0),
+                                  child: Text(
+                                    manga.status.toUpperCase(),
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.all(3)),
+                        Container(
+                          decoration: const BoxDecoration(
+                              color: Colors.white38,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              manga.publicationDemographic.toUpperCase(),
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -284,7 +292,6 @@ class _MangaBodyState extends State<MangaBody> {
     List<Widget> TabData = [];
     if (deviceMode == Orientation.portrait) {
       TabData.add(Container(
-        color: Colors.black26,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(child: widget.mangaInfo),
@@ -293,14 +300,12 @@ class _MangaBodyState extends State<MangaBody> {
     }
     TabData.addAll([
       Container(
-        color: Colors.black26,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: widget.mangaChapters,
         ),
       ),
       Container(
-        color: Colors.black26,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: widget.mangaBased,
@@ -313,51 +318,53 @@ class _MangaBodyState extends State<MangaBody> {
     return DefaultTabController(
       initialIndex: currentIndex,
       length: widget.tabs.length,
-      child: Column(
-        children: [
-          Flexible(
-            child: Container(
-              // width: size.width * 0.9,
-              height: (deviceMode == Orientation.landscape)
-                  ? (size.height)
-                  : (null),
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: (deviceMode == Orientation.landscape)
-                    ? (BorderRadius.all(Radius.circular(10)))
+      child: Container(
+        color: (Theme.of(context).brightness == Brightness.dark)
+            ? (Colors.black12)
+            : (Colors.white),
+        child: Column(
+          children: [
+            Flexible(
+              child: Container(
+                // width: size.width * 0.9,
+                height: (deviceMode == Orientation.landscape)
+                    ? (size.height)
                     : (null),
-              ),
-              child: Column(
-                children: [
-                  TabBar(
-                    onTap: (value) {
-                      if (deviceMode == Orientation.landscape) {
-                        widget.currentIndexL = value;
-                        widget.currentIndexP = (value == 0) ? 1 : 2;
-                      } else {
-                        widget.currentIndexP = value;
-                        if (value != 0) {
-                          widget.currentIndexL = (value == 1) ? 0 : 1;
+                decoration: BoxDecoration(
+                  borderRadius: (deviceMode == Orientation.landscape)
+                      ? (BorderRadius.all(Radius.circular(10)))
+                      : (null),
+                ),
+                child: Column(
+                  children: [
+                    TabBar(
+                      onTap: (value) {
+                        if (deviceMode == Orientation.landscape) {
+                          widget.currentIndexL = value;
+                          widget.currentIndexP = (value == 0) ? 1 : 2;
                         } else {
-                          widget.currentIndexL = 0;
+                          widget.currentIndexP = value;
+                          if (value != 0) {
+                            widget.currentIndexL = (value == 1) ? 0 : 1;
+                          } else {
+                            widget.currentIndexL = 0;
+                          }
                         }
-                      }
-                    },
-                    tabs: widget.tabs
-                        .map((e) => Tab(
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: Colors.white,
-                    labelColor: Colors.white,
-                  ),
-                  Flexible(child: TabBarView(children: TabData))
-                ],
+                      },
+                      tabs: widget.tabs
+                          .map((e) => Tab(
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      indicatorSize: TabBarIndicatorSize.label,
+                    ),
+                    Flexible(child: TabBarView(children: TabData))
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -376,64 +383,60 @@ class MangaInfo extends StatelessWidget {
           heading: "Description",
           child: Text(
             manga.desc,
-            style: const TextStyle(color: Colors.white70),
+            style: const TextStyle(color: Color(0xffaeaeae)),
           ),
         ),
         ExpandWidget(
           heading: "Genere",
-          child: Container(
-            child: Wrap(
-              spacing: 3,
-              runSpacing: 1,
-              children: manga.genre
-                  .map((e) => Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                        ),
-                        color: Colors.black12,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-        ExpandWidget(
-          heading: "Theme",
-          child: (manga.theme.isEmpty)
-              ? (Text(
-                  "Nothing Here!",
-                  style: TextStyle(color: Colors.white70),
-                ))
-              : (Container(
+          child: (manga.genre.isEmpty)
+              ? (const Text("Nothing Here!"))
+              : (SizedBox(
                   child: Wrap(
                     spacing: 3,
                     runSpacing: 1,
-                    children: manga.theme
+                    children: manga.genre
                         .map((e) => Card(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(100),
                                 ),
                               ),
-                              color: Colors.black12,
+                              color: Colors.white12,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 7, 10, 7),
                                 child: Text(
                                   e,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                )),
+        ),
+        ExpandWidget(
+          heading: "Theme",
+          child: (manga.theme.isEmpty)
+              ? (const Text(
+                  "Nothing Here!",
+                ))
+              : (SizedBox(
+                  child: Wrap(
+                    spacing: 3,
+                    runSpacing: 1,
+                    children: manga.theme
+                        .map((e) => Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                              ),
+                              color: Colors.white12,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 7, 10, 7),
+                                child: Text(
+                                  e,
                                 ),
                               ),
                             ))
@@ -465,7 +468,7 @@ class _MangaBasedState extends State<MangaBased> {
           case ConnectionState.active:
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           default:
             if (snapshot.hasError) {
               return Center(
@@ -476,10 +479,11 @@ class _MangaBasedState extends State<MangaBased> {
               );
             }
             return GridView.builder(
+                primary: false,
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: ((deviceMode == Orientation.landscape)
-                          ? (size.width - size.width * 0.35)
+                          ? (size.width - size.width * 0.46)
                           : (size.width)) ~/
                       105,
                   childAspectRatio: 105 / 160,

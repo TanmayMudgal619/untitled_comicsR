@@ -3,6 +3,7 @@ import 'dart:io';
 import 'classes.dart';
 import 'package:http/http.dart' as https;
 import 'dart:convert';
+import 'package:untitledcomics/globals/user_choice.dart';
 import 'package:untitledcomics/globals/globals.dart';
 
 Future<Manga> getmanga(var id) async {
@@ -40,11 +41,12 @@ Future<List<Manga>> getmangalist(List<String> ids, var limit) async {
 Future<List<Manga>> getmangalisttag(
     List<String> ids, var demo, var limit) async {
   var url;
-  if (demo != null) {
+  if (demo != "null") {
     url = Uri.http("api.mangadex.org", "/manga", {
       "includedTags[]": ids,
       "publicationDemographic[]": demo,
       "limit": limit,
+      "includedTagsMode": "OR",
       "includes[]": ["author", "artist", "cover_art"],
     });
   } else {
@@ -52,6 +54,7 @@ Future<List<Manga>> getmangalisttag(
       "includedTags[]": ids,
       "limit": limit,
       "includes[]": ["author", "artist", "cover_art"],
+      "includedTagsMode": "OR",
     });
   }
   var response = await https.get(url);
@@ -271,32 +274,15 @@ Future<List<MangaChapterData>> getChapters(String id, int limit, int offset,
 //   }
 // }
 
-Future<String> follow(String id) async {
+Future<String> follow(String id, User usr) async {
+  usr.refreshSession();
   var url = Uri.https("api.mangadex.org", "/manga/$id/follow");
   var response = await https.post(url,
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.token}"});
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"});
   if (response.statusCode == 200) {
     return "OK";
-  } else if (sharedPreferences.getBool("login") == true) {
-    var newt = await refresh();
-    sharedPreferences.setString("session", newt["session"]);
-    sharedPreferences.setString("refresh", newt["refresh"]);
-    return await follow(id);
   } else {
     throw Exception("Error Code : ${response.statusCode}");
-  }
-}
-
-Future<Map<String, dynamic>> refresh() async {
-  var url = Uri.https("api.mangadex.org", "/auth/refresh");
-  var response = await https.post(url,
-      headers: {HttpHeaders.contentTypeHeader: "application/json"},
-      body: jsonEncode({"token": usr.refresh}));
-  if (response.statusCode == 200) {
-    var jsonR = json.decode(response.body);
-    return jsonR["token"];
-  } else {
-    throw Exception("Error code : ${response.statusCode}");
   }
 }
 
@@ -319,20 +305,14 @@ Future<Map<String, dynamic>> loginUser(var username, var password) async {
 }
 
 Future<Map<String, dynamic>> getlibrary() async {
-  var url = Uri.https("api.mangadex.org", "/manga/status");
-  var response = await https.get(url,
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.token}"});
+  await usr.refreshSession();
+  var url = Uri.https("api.mangadex.org", "/manga/status/");
+  var response = await https.get(
+    url,
+    headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"},
+  );
   if (response.statusCode == 200) {
-    print("done");
     return jsonDecode(response.body)["statuses"];
-  } else if (login) {
-    print(response.statusCode);
-    var newt = await refresh();
-    sharedPreferences.setString("session", newt["session"]);
-    sharedPreferences.setString("refresh", newt["refresh"]);
-    usr.token = newt["session"];
-    usr.refresh = newt["refresh"];
-    return await getlibrary();
   } else {
     throw Exception("Error Code : ${response.statusCode}");
   }

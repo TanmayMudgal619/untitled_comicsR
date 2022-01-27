@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/ui/library.dart';
+import 'package:untitledcomics/ui/settings.dart';
 import 'helper.dart';
 import 'package:untitledcomics/globals/globals.dart';
 
@@ -16,7 +18,7 @@ List<Widget> potraitMode = [
       style: TextStyle(color: Colors.white),
     ),
   ),
-  Container(
+  SizedBox(
     child: SingleChildScrollView(
       child: Column(
         children: [
@@ -30,10 +32,5 @@ List<Widget> potraitMode = [
     ),
   ),
   Library(),
-  Container(
-    child: const Text(
-      "Settings",
-      style: TextStyle(color: Colors.white),
-    ),
-  ),
+  const Settings()
 ];

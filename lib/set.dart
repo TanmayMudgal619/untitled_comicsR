@@ -20,8 +20,12 @@ void get() {
   incognitoMode = sharedPreferences.getBool("incognitoMode")!;
   login = sharedPreferences.getBool("login")!;
   dataSaver = sharedPreferences.getBool("dataSaver")!;
-  usr = User(
+  if (login) {
+    usr = User(
       sharedPreferences.getString("username")!,
-      sharedPreferences.getString("token")!,
-      sharedPreferences.getString("refresh")!);
+      sharedPreferences.getString("session")!,
+      sharedPreferences.getString("refresh")!,
+      DateTime.now().subtract(const Duration(minutes: 10)),
+    );
+  }
 }

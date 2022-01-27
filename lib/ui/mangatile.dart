@@ -14,7 +14,7 @@ class MangaTile extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        border: Border.all(color: Colors.white12, width: 2),
+        border: Border.all(color: Colors.black12, width: 2),
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -52,6 +52,7 @@ class MangaTile extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
