@@ -8,7 +8,6 @@ import 'settings.dart';
 import 'helper.dart';
 import 'library.dart';
 import 'search.dart';
-// import 'homepage.dart';
 
 class Home extends StatefulWidget {
   Home();
@@ -18,7 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 2;
-  late TextField searchInput;
+  late CupertinoNavigationBar searchInput;
   List<Widget> homepage = [
     Container(
       child: const Text(
@@ -38,6 +37,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             MangaRow(title: "Latest Added Mangas", mangaList: latestManga),
             const Padding(padding: EdgeInsets.all(20)),
             MangaRow(title: "Recently Updated Mangas", mangaList: updatedManga),
+            const Padding(
+                padding: EdgeInsets.all(kBottomNavigationBarHeight / 2)),
           ],
         ),
       ),
@@ -48,21 +49,49 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    searchInput = TextField(
-      decoration: const InputDecoration(
-        hintText: "Search",
-        border: InputBorder.none,
+    searchInput = CupertinoNavigationBar(
+      leading: IconButton(
+        onPressed: () {},
+        icon: const Icon(
+          CupertinoIcons.search,
+        ),
       ),
-      controller: searchedManga,
-      onSubmitted: (value) {
-        if (searchedManga.text.isNotEmpty) {
-          setState(() {
-            isSearch = true;
-            mangaSearching = searchmanga(searchedManga.text, '100', '0');
-          });
-          // searchedManga.notifyListeners();
-        }
-      },
+      trailing: IconButton(
+        onPressed: () {},
+        icon: const Icon(
+          CupertinoIcons.slider_horizontal_3,
+        ),
+      ),
+      middle: TextField(
+        decoration: const InputDecoration(
+          hintText: "Search",
+          border: InputBorder.none,
+        ),
+        controller: searchedManga,
+        onChanged: (value) {
+          if (searchedManga.text.isEmpty) {
+            if (isSearch) {
+              setState(() {
+                mangaSearching.ignore();
+                isSearch = false;
+              });
+            }
+          }
+        },
+        onSubmitted: (value) {
+          if (searchedManga.text.isNotEmpty) {
+            setState(() {
+              isSearch = true;
+              mangaSearching = searchmanga(searchedManga.text, '50', '0');
+            });
+          } else {
+            setState(() {
+              mangaSearching.ignore();
+              isSearch = false;
+            });
+          }
+        },
+      ),
     );
     super.initState();
   }
@@ -77,38 +106,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       extendBody: true,
       appBar: (deviceMode == Orientation.portrait)
-          ? (CupertinoNavigationBar(
-              automaticallyImplyLeading: false,
-              leading: (currentIndex == 1)
-                  ? (IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        CupertinoIcons.search,
-                      ),
-                    ))
-                  : (null),
-              trailing: (currentIndex == 1)
-                  ? (IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        CupertinoIcons.slider_horizontal_3,
-                      ),
-                    ))
-                  : (null),
-              middle: (currentIndex == 1)
-                  ? searchInput
-                  : ((Theme.of(context).brightness == Brightness.light)
-                      ? (ColorFiltered(
-                          colorFilter: const ColorFilter.matrix([
-                            -1, 0, 0, 0, 255, //
-                            0, -1, 0, 0, 255, //
-                            0, 0, -1, 0, 255, //
-                            0, 0, 0, 1, 0, //
-                          ]),
-                          child: Image.asset("assets/images/logo.png"),
-                        ))
-                      : (Image.asset("assets/images/logo.png"))),
-            ))
+          ? ((currentIndex == 1)
+              ? (searchInput)
+              : (CupertinoNavigationBar(
+                  middle: Image.asset("assets/images/logo.png"),
+                )))
           : (null),
       body: Row(
         mainAxisSize: MainAxisSize.max,
@@ -210,35 +212,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             child: Column(
               children: [
                 (currentIndex == 1 && deviceMode == Orientation.landscape)
-                    ? (Padding(
+                    ? Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: (Theme.of(context).brightness ==
-                                    Brightness.dark)
-                                ? (Colors.black12)
-                                : (Colors.white),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: ListTile(
-                            leading: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                CupertinoIcons.search,
-                              ),
-                            ),
-                            title: searchInput,
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                CupertinoIcons.slider_horizontal_3,
-                              ),
-                            ),
-                          ),
+                          decoration: const BoxDecoration(
+                              color: Colors.black26,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: (searchInput),
                         ),
-                      ))
+                      )
                     : (SizedBox()),
                 Expanded(
                   child: Padding(

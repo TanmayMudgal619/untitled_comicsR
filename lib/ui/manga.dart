@@ -78,23 +78,28 @@ class _MangaPageState extends State<MangaPage> {
                     color: Colors.redAccent,
                   );
                 } else {
-                  return RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: snapshot.data!["average"]
-                              .toStringAsFixed(2)
-                              .toString(),
-                        ),
-                        const WidgetSpan(
-                          child: Icon(
-                            CupertinoIcons.star,
-                            size: 18,
+                  return InkWell(
+                    onTap: () {},
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: (snapshot.data!["average"] != null)
+                                ? (snapshot.data!["average"]
+                                    .toStringAsFixed(2)
+                                    .toString())
+                                : ("0.00"),
                           ),
+                          const WidgetSpan(
+                            child: Icon(
+                              CupertinoIcons.star,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
                         ),
-                      ],
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
                       ),
                     ),
                   );

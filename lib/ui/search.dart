@@ -41,7 +41,7 @@ class _SearchMangaState extends State<SearchManga> {
                           crossAxisCount: ((deviceMode == Orientation.landscape)
                                   ? (size.width - size.width * 0.3)
                                   : (size.width)) ~/
-                              105,
+                              110,
                           childAspectRatio: 105 / 160,
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 10,
