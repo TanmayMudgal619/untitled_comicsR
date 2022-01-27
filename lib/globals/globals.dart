@@ -28,3 +28,7 @@ Map<String, Map<String, dynamic>> allStatus = {};
 
 late Orientation deviceMode;
 late Size size;
+
+TextEditingController searchedManga = TextEditingController();
+bool isSearch = false;
+late Future<List<Manga>> mangaSearching;

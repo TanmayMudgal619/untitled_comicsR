@@ -24,6 +24,7 @@ class _MangaPageState extends State<MangaPage> {
   late MangaBased mangaBased;
   late Future<List<Manga>> basedManga;
   late MangaPageChapter mangaPageChapter;
+  late Future<Map<String, dynamic>> mangaRatings;
   int currentIndexL = 0;
   int currentIndexP = 0;
   @override
@@ -33,6 +34,8 @@ class _MangaPageState extends State<MangaPage> {
     mangaInfo = MangaInfo(
       manga: widget.mangaOpened,
     );
+
+    mangaRatings = getMangaRating(widget.mangaOpened.id);
 
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
         widget.mangaOpened.publicationDemographic, '25');
@@ -54,6 +57,50 @@ class _MangaPageState extends State<MangaPage> {
       appBar: CupertinoNavigationBar(
         middle: Text(
           widget.mangaOpened.title,
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+        ),
+        trailing: FutureBuilder<Map<String, dynamic>>(
+          future: mangaRatings,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.active:
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(),
+                );
+              default:
+                if (snapshot.hasError) {
+                  return const Icon(
+                    CupertinoIcons.star,
+                    color: Colors.redAccent,
+                  );
+                } else {
+                  return RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: snapshot.data!["average"]
+                              .toStringAsFixed(2)
+                              .toString(),
+                        ),
+                        const WidgetSpan(
+                          child: Icon(
+                            CupertinoIcons.star,
+                            size: 18,
+                          ),
+                        ),
+                      ],
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                    ),
+                  );
+                }
+            }
+          },
         ),
       ),
       body: (deviceMode == Orientation.landscape)

@@ -317,3 +317,13 @@ Future<Map<String, dynamic>> getlibrary() async {
     throw Exception("Error Code : ${response.statusCode}");
   }
 }
+
+Future<Map<String, dynamic>> getMangaRating(String id) async {
+  var url = Uri.https("api.mangadex.org", "/statistics/manga/$id");
+  var response = await https.get(url);
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)["statistics"][id]["rating"];
+  } else {
+    throw Exception("Error ${response.statusCode}");
+  }
+}

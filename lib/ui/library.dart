@@ -27,7 +27,35 @@ class _LibraryState extends State<Library> {
         .toList());
     allStatus.entries.forEach((element) {
       element.value["scroll"] = ScrollController();
+      element.value["scroll"].addListener(() {
+        if ((element.value["scroll"].offset >=
+                element.value["scroll"].position.maxScrollExtent) &&
+            !element.value["scroll"].position.outOfRange &&
+            element.value["next"] &&
+            !element.value["loading"]) {
+          setState(() {
+            element.value["loading"] = true;
+            element.value["off"] += 100;
+            getmangalist(
+                    element.value["data"].sublist(
+                        element.value["off"],
+                        (element.value["data"].length - element.value["off"] >=
+                                100)
+                            ? (100)
+                            : (null)),
+                    '100')
+                .then((value) => setState(() {
+                      element.value["loaded"].addAll(value);
+                      element.value["loading"] = false;
+                      if (value.length < 100) {
+                        element.value["next"] = false;
+                      }
+                    }));
+          });
+        }
+      });
       if (element.value["data"] != null) {
+        element.value["loading"] = true;
         getmangalist(
                 element.value["data"].sublist(
                     0,
@@ -37,6 +65,7 @@ class _LibraryState extends State<Library> {
                 '100')
             .then((value) {
           setState(() {
+            element.value["loading"] = false;
             element.value["loaded"].addAll(value);
             if (value.length < 100) {
               element.value["next"] = false;
@@ -85,6 +114,7 @@ class _LibraryState extends State<Library> {
                     }
                     return GridView.builder(
                         shrinkWrap: true,
+                        controller: e["scroll"],
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: ((deviceMode == Orientation.landscape)
                                   ? (size.width - size.width * 0.3)
