@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       title: "Untitled Comics",
       theme: light,
       darkTheme: dark,
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       home: (incognitoMode == true)
           ? (const Loading())
           : ((login) ? (const Loading()) : (const Login())),
