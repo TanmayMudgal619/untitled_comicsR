@@ -14,7 +14,15 @@ class MangaTile extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        border: Border.all(color: Colors.black12, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: (Theme.of(context).brightness == Brightness.dark)
+                ? (Colors.black26)
+                : (Colors.grey[200]!),
+            offset: const Offset(1, 1),
+            spreadRadius: 2,
+          )
+        ],
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(10)),

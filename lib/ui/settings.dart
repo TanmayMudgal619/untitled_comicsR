@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:untitledcomics/ui/login.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -27,6 +28,16 @@ class _SettingsState extends State<Settings> {
             Text(
               usr.username,
             ),
+            ListTile(
+              onTap: () {
+                sharedPreferences.clear();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                    (route) => false);
+              },
+              title: const Text("LogOut!"),
+            )
           ],
         ),
       ),

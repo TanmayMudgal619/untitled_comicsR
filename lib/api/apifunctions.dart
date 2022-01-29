@@ -5,6 +5,7 @@ import 'package:http/http.dart' as https;
 import 'dart:convert';
 import 'package:untitledcomics/globals/user_choice.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'dart:math';
 
 Future<Manga> getmanga(var id) async {
   var url = Uri.http("api.mangadex.org", "/manga/$id", {
@@ -39,7 +40,7 @@ Future<List<Manga>> getmangalist(List<String> ids, var limit) async {
 }
 
 Future<List<Manga>> getmangalisttag(
-    List<String> ids, var demo, var limit) async {
+    List<String> ids, var demo, var limit, String mangaId) async {
   var url;
   if (demo != "null") {
     url = Uri.http("api.mangadex.org", "/manga", {
@@ -62,7 +63,9 @@ Future<List<Manga>> getmangalisttag(
     var jsonR = json.decode(response.body);
     List<Manga> sedata = [];
     for (var i in jsonR["data"]) {
-      sedata.add(Manga.fromJson(i));
+      if (i["id"] != mangaId) {
+        sedata.add(Manga.fromJson(i));
+      }
     }
     return sedata;
   } else {
@@ -229,50 +232,50 @@ Future<List<MangaChapterData>> getChapters(String id, int limit, int offset,
   }
 }
 
-// Future<Map<String, Set<Manga>>> expl(int off) async {
-//   int a = Random().nextInt(10000 - 200);
-//   int b = Random().nextInt(10000 - 200);
-//   b = (a == b) ? (a + 100) : (b);
-//   var url = Uri.http("api.mangadex.org", "/manga", {
-//     "limit": '100',
-//     "offset": a.toString(),
-//     "includes[]": ["author", "artist", "cover_art"],
-//   });
-//   var urla = Uri.http("api.mangadex.org", "/manga", {
-//     "limit": '100',
-//     "offset": b.toString(),
-//     "includes[]": ["author", "artist", "cover_art"],
-//   });
-//   var response = await Future.wait([https.get(url), https.get(urla)]);
-//   if (response[0].statusCode == 200 && response[1].statusCode == 200) {
-//     var jsona = jsonDecode(response[0].body);
-//     var jsonb = jsonDecode(response[1].body);
-//     Map<String, Set<Manga>> maind = {};
-//     for (var i in jsona["data"]) {
-//       var e = Manga.fromJson(i);
-//       for (var j in e.genrei) {
-//         if (maind[j] != null) {
-//           maind[j]!.add(e);
-//         } else {
-//           maind[j] = {e};
-//         }
-//       }
-//     }
-//     for (var i in jsonb["data"]) {
-//       var e = Manga.fromJson(i);
-//       for (var j in e.genrei) {
-//         if (maind[j] != null) {
-//           maind[j]!.add(e);
-//         } else {
-//           maind[j] = {e};
-//         }
-//       }
-//     }
-//     return maind;
-//   } else {
-//     throw Exception("Error!");
-//   }
-// }
+Future<Map<String, Set<Manga>>> expl() async {
+  int a = Random().nextInt(10000 - 200);
+  int b = Random().nextInt(10000 - 200);
+  b = (a == b) ? (a + 100) : (b);
+  var url = Uri.http("api.mangadex.org", "/manga", {
+    "limit": '100',
+    "offset": a.toString(),
+    "includes[]": ["author", "artist", "cover_art"],
+  });
+  var urla = Uri.http("api.mangadex.org", "/manga", {
+    "limit": '100',
+    "offset": b.toString(),
+    "includes[]": ["author", "artist", "cover_art"],
+  });
+  var response = await Future.wait([https.get(url), https.get(urla)]);
+  if (response[0].statusCode == 200 && response[1].statusCode == 200) {
+    var jsona = jsonDecode(response[0].body);
+    var jsonb = jsonDecode(response[1].body);
+    Map<String, Set<Manga>> maind = {};
+    for (var i in jsona["data"]) {
+      var e = Manga.fromJson(i);
+      for (var j in e.genrei) {
+        if (maind[j] != null) {
+          maind[j]!.add(e);
+        } else {
+          maind[j] = {e};
+        }
+      }
+    }
+    for (var i in jsonb["data"]) {
+      var e = Manga.fromJson(i);
+      for (var j in e.genrei) {
+        if (maind[j] != null) {
+          maind[j]!.add(e);
+        } else {
+          maind[j] = {e};
+        }
+      }
+    }
+    return maind;
+  } else {
+    throw Exception("Error!");
+  }
+}
 
 Future<String> follow(String id, User usr) async {
   usr.refreshSession();

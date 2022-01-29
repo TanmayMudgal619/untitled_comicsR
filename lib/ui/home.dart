@@ -7,6 +7,7 @@ import 'package:untitledcomics/ui/search.dart';
 import 'settings.dart';
 import 'helper.dart';
 import 'library.dart';
+import 'explore.dart';
 import 'search.dart';
 
 class Home extends StatefulWidget {
@@ -20,10 +21,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late CupertinoNavigationBar searchInput;
   List<Widget> homepage = [
     Container(
-      child: const Text(
-        "Explore",
-        style: TextStyle(color: Colors.white),
-      ),
+      child: ExploreManga(),
     ),
     SizedBox(
       child: SearchManga(),
@@ -109,7 +107,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ? ((currentIndex == 1)
               ? (searchInput)
               : (CupertinoNavigationBar(
-                  middle: Image.asset("assets/images/logo.png"),
+                  middle: (Theme.of(context).brightness == Brightness.light)
+                      ? (ColorFiltered(
+                          colorFilter: const ColorFilter.matrix([
+                            -1, 0, 0, 0, 255, //
+                            0, -1, 0, 0, 255, //
+                            0, 0, -1, 0, 255, //
+                            0, 0, 0, 1, 0, //
+                          ]),
+                          child: Image.asset("assets/images/logo.png"),
+                        ))
+                      : (Image.asset("assets/images/logo.png")),
                 )))
           : (null),
       body: Row(
@@ -138,13 +146,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   currentIndex = 2;
                                 });
                               },
-                              child: const Center(
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage:
-                                      AssetImage("assets/images/logo.png"),
-                                  radius: 33,
-                                ),
+                              child: Center(
+                                child: (Theme.of(context).brightness ==
+                                        Brightness.light)
+                                    ? (ColorFiltered(
+                                        colorFilter: const ColorFilter.matrix([
+                                          -1, 0, 0, 0, 255, //
+                                          0, -1, 0, 0, 255, //
+                                          0, 0, -1, 0, 255, //
+                                          0, 0, 0, 1, 0, //
+                                        ]),
+                                        child: Image.asset(
+                                            "assets/images/logo.png"),
+                                      ))
+                                    : (Image.asset("assets/images/logo.png")),
                               ),
                             ),
                             const SizedBox(
@@ -253,7 +268,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: (BottomNavigationBar(
-                    backgroundColor: Colors.transparent,
                     elevation: 0,
                     currentIndex: currentIndex,
                     onTap: (value) {
@@ -263,35 +277,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     },
                     items: const [
                       BottomNavigationBarItem(
-                        backgroundColor: Colors.transparent,
                         icon: Icon(
                           CupertinoIcons.compass,
                         ),
                         label: "Explore",
                       ),
                       BottomNavigationBarItem(
-                        backgroundColor: Colors.transparent,
                         icon: Icon(
                           CupertinoIcons.search,
                         ),
                         label: "Search",
                       ),
                       BottomNavigationBarItem(
-                        backgroundColor: Colors.transparent,
                         icon: Icon(
                           CupertinoIcons.home,
                         ),
                         label: "Home",
                       ),
                       BottomNavigationBarItem(
-                        backgroundColor: Colors.transparent,
                         icon: Icon(
                           CupertinoIcons.bookmark,
                         ),
                         label: "Library",
                       ),
                       BottomNavigationBarItem(
-                        backgroundColor: Colors.transparent,
                         icon: Icon(
                           CupertinoIcons.settings,
                         ),

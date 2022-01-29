@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
@@ -19,6 +17,7 @@ class MangaPage extends StatefulWidget {
 }
 
 class _MangaPageState extends State<MangaPage> {
+  late CupertinoNavigationBar editManga;
   late MangaHeader mangaHeader;
   late MangaInfo mangaInfo;
   late MangaBased mangaBased;
@@ -27,6 +26,7 @@ class _MangaPageState extends State<MangaPage> {
   late Future<Map<String, dynamic>> mangaRatings;
   int currentIndexL = 0;
   int currentIndexP = 0;
+  bool titleBar = true;
   @override
   void initState() {
     mangaHeader = MangaHeader(manga: widget.mangaOpened);
@@ -38,13 +38,95 @@ class _MangaPageState extends State<MangaPage> {
     mangaRatings = getMangaRating(widget.mangaOpened.id);
 
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
-        widget.mangaOpened.publicationDemographic, '25');
+        widget.mangaOpened.publicationDemographic, '25', widget.mangaOpened.id);
 
     mangaBased = MangaBased(
       basedManga: basedManga,
     );
 
     mangaPageChapter = MangaPageChapter(id: widget.mangaOpened.id);
+
+    editManga = CupertinoNavigationBar(
+      leading: Material(
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              titleBar = true;
+            });
+          },
+          icon: const Icon(CupertinoIcons.xmark),
+        ),
+      ),
+      trailing: FutureBuilder<Map<String, dynamic>>(
+        future: mangaRatings,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.active:
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(),
+              );
+            default:
+              if (snapshot.hasError) {
+                return const Icon(
+                  CupertinoIcons.star,
+                  color: Colors.redAccent,
+                );
+              } else {
+                return Material(
+                  child: IconButton(
+                    onPressed: () {
+                      showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) {
+                            return Align(
+                              alignment: Alignment.topCenter,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: kToolbarHeight * 2,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColorDark,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          (snapshot.data!["average"] != null)
+                                              ? (snapshot.data!["average"]
+                                                  .toStringAsFixed(2)
+                                                  .toString())
+                                              : ("0.00"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                    icon: const Icon(
+                      CupertinoIcons.star,
+                      size: 18,
+                    ),
+                  ),
+                );
+              }
+          }
+        },
+      ),
+    );
 
     super.initState();
   }
@@ -54,60 +136,25 @@ class _MangaPageState extends State<MangaPage> {
     deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: CupertinoNavigationBar(
-        middle: Text(
-          widget.mangaOpened.title,
-          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
-        ),
-        trailing: FutureBuilder<Map<String, dynamic>>(
-          future: mangaRatings,
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.active:
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(),
-                );
-              default:
-                if (snapshot.hasError) {
-                  return const Icon(
-                    CupertinoIcons.star,
-                    color: Colors.redAccent,
-                  );
-                } else {
-                  return InkWell(
-                    onTap: () {},
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: (snapshot.data!["average"] != null)
-                                ? (snapshot.data!["average"]
-                                    .toStringAsFixed(2)
-                                    .toString())
-                                : ("0.00"),
-                          ),
-                          const WidgetSpan(
-                            child: Icon(
-                              CupertinoIcons.star,
-                              size: 18,
-                            ),
-                          ),
-                        ],
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-            }
-          },
-        ),
-      ),
+      appBar: (titleBar)
+          ? (CupertinoNavigationBar(
+              middle: Text(
+                widget.mangaOpened.title,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color),
+              ),
+              trailing: Material(
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      titleBar = false;
+                    });
+                  },
+                  icon: const Icon(CupertinoIcons.ellipsis_vertical),
+                ),
+              ),
+            ))
+          : (editManga),
       body: (deviceMode == Orientation.landscape)
           ? Row(
               children: [

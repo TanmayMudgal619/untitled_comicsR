@@ -22,7 +22,6 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       appBar: const CupertinoNavigationBar(
         automaticallyImplyLeading: false,
         middle: Text(
@@ -37,7 +36,6 @@ class _LoginState extends State<Login> {
             child: Container(
               padding: const EdgeInsets.all(30),
               decoration: const BoxDecoration(
-                color: Colors.black12,
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
@@ -45,54 +43,49 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/logo.png",
-                    width: 50,
+                  (Theme.of(context).brightness == Brightness.light)
+                      ? (ColorFiltered(
+                          colorFilter: const ColorFilter.matrix([
+                            -1, 0, 0, 0, 255, //
+                            0, -1, 0, 0, 255, //
+                            0, 0, -1, 0, 255, //
+                            0, 0, 0, 1, 0, //
+                          ]),
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            width: 50,
+                          ),
+                        ))
+                      : (Image.asset(
+                          "assets/images/logo.png",
+                          width: 50,
+                        )),
+                  const SizedBox(
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 1.0),
                     child: TextFormField(
                       controller: usrnm,
-                      style: const TextStyle(color: Colors.white),
-                      cursorColor: Colors.white,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 3,
-                          ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black26,
-                            width: 3,
-                          ),
-                        ),
-                        labelText: 'Username',
-                        labelStyle: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: "Username",
+                        labelStyle: Theme.of(context).textTheme.bodyText1,
+                        filled: true,
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 1.0),
                     child: TextFormField(
                       controller: pswd,
                       obscureText: !show,
-                      style: const TextStyle(color: Colors.white),
                       cursorColor: Colors.white,
                       decoration: InputDecoration(
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 3,
-                          ),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black26,
-                            width: 3,
-                          ),
-                        ),
+                        labelStyle: Theme.of(context).textTheme.bodyText1,
+                        filled: true,
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -103,19 +96,16 @@ class _LoginState extends State<Login> {
                             (show)
                                 ? (Icons.remove_red_eye)
                                 : (Icons.remove_red_eye_outlined),
-                            color: Colors.white,
                             size: 20,
                           ),
                         ),
                         labelText: 'Password',
-                        labelStyle: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: ListTile(
-                      tileColor: Colors.white24,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -163,14 +153,12 @@ class _LoginState extends State<Login> {
                       },
                       title: const Text(
                         "LogIn",
-                        style: TextStyle(color: Colors.black45),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
                     child: ListTile(
-                      tileColor: Colors.white24,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -185,7 +173,6 @@ class _LoginState extends State<Login> {
                       },
                       title: const Text(
                         "Incognito",
-                        style: TextStyle(color: Colors.black45),
                       ),
                     ),
                   )

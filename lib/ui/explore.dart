@@ -1,1 +1,132 @@
+import 'package:flutter/material.dart';
+import 'package:untitledcomics/api/apifunctions.dart';
+import 'package:untitledcomics/api/classes.dart';
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
+import 'package:untitledcomics/globals/tags.dart';
+import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/ui/show.dart';
+import 'mangatile.dart';
 
+class ExploreManga extends StatefulWidget {
+  late Future<Map<String, Set<Manga>>> exploreManga;
+  ExploreManga({Key? key}) : super(key: key) {
+    exploreManga = expl();
+  }
+
+  @override
+  _ExploreMangaState createState() => _ExploreMangaState();
+}
+
+class _ExploreMangaState extends State<ExploreManga> {
+  @override
+  Widget build(BuildContext context) {
+    deviceMode = MediaQuery.of(context).orientation;
+    size = MediaQuery.of(context).size;
+    return FutureBuilder<Map<String, Set<Manga>>>(
+      future: widget.exploreManga,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.active:
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: snapshot.data!.entries.map((e) {
+                    var a = Random().nextInt((e.value.length > 9)
+                        ? (e.value.length - 9)
+                        : (e.value.length));
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, bottom: 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    genres[e.key]!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ShowManga(
+                                          title: genres[e.key]!,
+                                          mangas: e.value.toList(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    CupertinoIcons.forward,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GV(
+                            mangaGV: (e.value.length > 9)
+                                ? (e.value.toList().sublist(a, a + 9))
+                                : (e.value.toList()),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+            }
+        }
+      },
+    );
+  }
+}
+
+class GV extends StatelessWidget {
+  final List<Manga> mangaGV;
+  const GV({Key? key, required this.mangaGV}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        primary: false,
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: ((deviceMode == Orientation.landscape)
+                  ? (size.width - size.width * 0.36)
+                  : (size.width)) ~/
+              105,
+          childAspectRatio: 105 / 160,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 5,
+        ),
+        itemCount: mangaGV.length,
+        itemBuilder: (context, val) {
+          return MangaTile(
+            manga: mangaGV[val],
+          );
+        });
+  }
+}

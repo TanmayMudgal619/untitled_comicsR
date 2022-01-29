@@ -5,16 +5,16 @@ ThemeData light = ThemeData(
   primaryColor: Colors.black,
   primaryColorBrightness: Brightness.light,
   primaryColorLight: Colors.black,
-  primaryColorDark: Colors.grey[100]!,
+  primaryColorDark: Colors.white,
   canvasColor: Colors.white,
   shadowColor: Colors.black12,
-  scaffoldBackgroundColor: Colors.grey[100]!,
+  scaffoldBackgroundColor: Colors.white,
   bottomAppBarColor: Colors.black26,
   progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.black),
   brightness: Brightness.light,
   secondaryHeaderColor: Colors.black,
   backgroundColor: Colors.black,
-  dialogBackgroundColor: Colors.grey[100]!,
+  dialogBackgroundColor: Colors.white,
   indicatorColor: Colors.black54,
   cursorColor: Colors.black,
   primarySwatch: const MaterialColor(0xFFFFFFFF, <int, Color>{
@@ -29,14 +29,14 @@ ThemeData light = ThemeData(
     800: Color(0xFF000000),
     900: Color(0xFF000000),
   }),
-  toggleableActiveColor: Colors.grey[800]!,
+  toggleableActiveColor: Colors.white,
   primaryIconTheme: const IconThemeData(
     color: Colors.black,
   ),
   sliderTheme: SliderThemeData.fromPrimaryColors(
     primaryColor: Colors.white,
-    primaryColorDark: Colors.grey[800]!,
-    primaryColorLight: Colors.grey[100]!,
+    primaryColorDark: Colors.white,
+    primaryColorLight: Colors.white,
     valueIndicatorTextStyle: const TextStyle(color: Colors.black54),
   ),
   tabBarTheme: const TabBarTheme(
@@ -61,6 +61,7 @@ ThemeData light = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedItemColor: Colors.black87,
     unselectedItemColor: Colors.black45,
+    backgroundColor: Colors.white54,
   ),
 );
 ThemeData dark = ThemeData(
@@ -129,5 +130,6 @@ ThemeData dark = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.white70,
+    backgroundColor: Colors.black54,
   ),
 );
