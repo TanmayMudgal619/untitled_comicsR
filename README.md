@@ -1,6 +1,6 @@
 # untitledcomics
 
-A new Flutter project.
+A Flutter Project for Mangadex.
 
 ## Getting Started
 
