@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
+import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/ui/mangatile.dart';
 import 'helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,16 +18,18 @@ class MangaPage extends StatefulWidget {
 }
 
 class _MangaPageState extends State<MangaPage> {
-  late CupertinoNavigationBar editManga;
   late MangaHeader mangaHeader;
   late MangaInfo mangaInfo;
   late MangaBased mangaBased;
   late Future<List<Manga>> basedManga;
   late MangaPageChapter mangaPageChapter;
-  late Future<Map<String, dynamic>> mangaRatings;
+  late Future<MangaStatistics> mangaStatisticsLoader;
+  late MangaStatistics mangaStatistics;
+  late Future<MangaAggregate> mangaAggregate;
+  late String mangaReadingStatus;
   int currentIndexL = 0;
   int currentIndexP = 0;
-  bool titleBar = true;
+  double rating = 0.0;
   @override
   void initState() {
     mangaHeader = MangaHeader(manga: widget.mangaOpened);
@@ -34,8 +37,20 @@ class _MangaPageState extends State<MangaPage> {
     mangaInfo = MangaInfo(
       manga: widget.mangaOpened,
     );
+    for (var status in allComics.entries) {
+      if (status.value.contains(widget.mangaOpened.id)) {
+        mangaReadingStatus = status.key;
+      }
+    }
 
-    mangaRatings = getMangaRating(widget.mangaOpened.id);
+    mangaStatisticsLoader =
+        getMangaStatistics(widget.mangaOpened.id).then((value) {
+      setState(() {
+        mangaStatistics = value;
+        rating = value.rating.toDouble();
+      });
+      return value;
+    });
 
     basedManga = getmangalisttag(widget.mangaOpened.genrei,
         widget.mangaOpened.publicationDemographic, '25', widget.mangaOpened.id);
@@ -46,88 +61,6 @@ class _MangaPageState extends State<MangaPage> {
 
     mangaPageChapter = MangaPageChapter(id: widget.mangaOpened.id);
 
-    editManga = CupertinoNavigationBar(
-      leading: Material(
-        child: IconButton(
-          onPressed: () {
-            setState(() {
-              titleBar = true;
-            });
-          },
-          icon: const Icon(CupertinoIcons.xmark),
-        ),
-      ),
-      trailing: FutureBuilder<Map<String, dynamic>>(
-        future: mangaRatings,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.active:
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(),
-              );
-            default:
-              if (snapshot.hasError) {
-                return const Icon(
-                  CupertinoIcons.star,
-                  color: Colors.redAccent,
-                );
-              } else {
-                return Material(
-                  child: IconButton(
-                    onPressed: () {
-                      showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) {
-                            return Align(
-                              alignment: Alignment.topCenter,
-                              child: Material(
-                                color: Colors.transparent,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: kToolbarHeight * 2,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColorDark,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          (snapshot.data!["average"] != null)
-                                              ? (snapshot.data!["average"]
-                                                  .toStringAsFixed(2)
-                                                  .toString())
-                                              : ("0.00"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                    icon: const Icon(
-                      CupertinoIcons.star,
-                      size: 18,
-                    ),
-                  ),
-                );
-              }
-          }
-        },
-      ),
-    );
-
     super.initState();
   }
 
@@ -136,25 +69,154 @@ class _MangaPageState extends State<MangaPage> {
     deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: (titleBar)
-          ? (CupertinoNavigationBar(
-              middle: Text(
-                widget.mangaOpened.title,
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color),
-              ),
-              trailing: Material(
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      titleBar = false;
-                    });
-                  },
-                  icon: const Icon(CupertinoIcons.ellipsis_vertical),
-                ),
-              ),
-            ))
-          : (editManga),
+      appBar: CupertinoNavigationBar(
+        middle: Text(
+          widget.mangaOpened.title,
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+        ),
+        trailing: FutureBuilder<MangaStatistics>(
+          future: mangaStatisticsLoader,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.active:
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              default:
+                if (snapshot.hasError) {
+                  print(snapshot.error.toString());
+                  return const Icon(
+                    CupertinoIcons.circle_fill,
+                    color: Colors.redAccent,
+                    size: 16,
+                  );
+                } else {
+                  return Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            ListTile(
+                                              title: const Text(
+                                                "Total Rating",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              trailing: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 10.0,
+                                                ),
+                                                child: Text(
+                                                  mangaStatistics.average
+                                                      .toStringAsFixed(2),
+                                                ),
+                                              ),
+                                            ),
+                                            ExpandWidget(
+                                              heading: "My Rating",
+                                              child: StatefulBuilder(
+                                                builder:
+                                                    (context, setSliderState) {
+                                                  return Slider(
+                                                    divisions: 9,
+                                                    label: rating.toString(),
+                                                    thumbColor:
+                                                        Theme.of(context)
+                                                            .primaryColor,
+                                                    activeColor:
+                                                        Theme.of(context)
+                                                            .primaryColor,
+                                                    inactiveColor:
+                                                        Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(0.4),
+                                                    value: (rating != 0)
+                                                        ? (rating)
+                                                        : (1),
+                                                    min: 1,
+                                                    max: 10,
+                                                    onChanged: (value) {
+                                                      setSliderState(() {
+                                                        rating = value;
+                                                      });
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                              expanded: false,
+                                            ),
+                                            ExpandWidget(
+                                              heading: "Ratings",
+                                              child: Column(
+                                                children: mangaStatistics
+                                                    .distribution.entries
+                                                    .map(
+                                                      (e) => ListTile(
+                                                        dense: true,
+                                                        visualDensity:
+                                                            VisualDensity
+                                                                .compact,
+                                                        title: Text(
+                                                            ratingsLabel[
+                                                                e.key]!),
+                                                        trailing: Text(
+                                                            e.value.toString()),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              ),
+                                              expanded: false,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      icon: const Icon(CupertinoIcons.star_fill),
+                    ),
+                  );
+                }
+            }
+          },
+        ),
+        backgroundColor: Colors.transparent,
+      ),
       body: (deviceMode == Orientation.landscape)
           ? Row(
               children: [
@@ -484,6 +546,7 @@ class MangaInfo extends StatelessWidget {
             manga.desc,
             style: const TextStyle(color: Color(0xffaeaeae)),
           ),
+          expanded: true,
         ),
         ExpandWidget(
           heading: "Genere",
@@ -512,6 +575,7 @@ class MangaInfo extends StatelessWidget {
                         .toList(),
                   ),
                 )),
+          expanded: true,
         ),
         ExpandWidget(
           heading: "Theme",
@@ -542,6 +606,7 @@ class MangaInfo extends StatelessWidget {
                         .toList(),
                   ),
                 )),
+          expanded: true,
         )
       ],
     );

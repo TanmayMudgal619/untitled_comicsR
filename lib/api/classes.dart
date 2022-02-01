@@ -116,24 +116,107 @@ class MangaChapterData {
 
   factory MangaChapterData.fromJson(Map<String, dynamic> json) {
     String scg = "";
+    String volume = json['attributes']['volume'].toString();
+    volume = (volume == "null") ? ("N/A") : (volume);
+    String chapter = json['attributes']['chapter'].toString();
+    chapter = (chapter == "null") ? ("N/A") : (chapter);
+    String title = json['attributes']['title'].toString();
+    title = (title == "null" || title == null || title == '')
+        ? ("Chapter $chapter")
+        : (title);
     for (var i in json["relationships"]) {
       if (i["type"] == "scanlation_group") {
         scg = i["attributes"]["name"];
       }
     }
     return MangaChapterData(
-        id: json['id'],
-        title: json['attributes']['title'].toString(),
-        lang: json['attributes']['translatedLanguage'].toString(),
-        chapter: json['attributes']['chapter'].toString(),
-        volume: json['attributes']['volume'].toString(),
-        scg: scg);
+      id: json['id'],
+      title: title,
+      lang: json['attributes']['translatedLanguage'].toString(),
+      chapter: chapter,
+      volume: volume,
+      scg: scg,
+    );
   }
 }
 
 class GetChapterImg {
   final String baseUrl;
+  final String hash;
   final List<dynamic> images;
   final List<dynamic> simages;
-  GetChapterImg(this.baseUrl, this.images, this.simages);
+  GetChapterImg(this.baseUrl, this.hash, this.images, this.simages);
+}
+
+class MangaChapter {
+  final String chapter;
+  final List<dynamic> ids;
+  MangaChapter({required this.chapter, required this.ids});
+
+  factory MangaChapter.fromJson(Map<String, dynamic> json) {
+    List<dynamic> ids = [json["id"]];
+    ids = ids + json["others"];
+    return MangaChapter(chapter: json["chapter"], ids: ids);
+  }
+}
+
+class MangaVolume {
+  final String volume;
+  final List<MangaChapter> chapters;
+  MangaVolume({required this.volume, required this.chapters});
+
+  factory MangaVolume.fromJson(Map<String, dynamic> json) {
+    List<MangaChapter> chapters = [];
+    chapters = json["chapters"]
+        .values
+        .map<MangaChapter>((e) => MangaChapter.fromJson(e))
+        .toList();
+    return MangaVolume(volume: json["volume"], chapters: chapters);
+  }
+}
+
+class MangaAggregate {
+  final List<MangaVolume> volumes;
+  MangaAggregate({required this.volumes});
+
+  factory MangaAggregate.fromJson(Map<String, dynamic> json) {
+    List<MangaVolume> volumes = [];
+    volumes = json["volumes"]
+        .values
+        .map<MangaVolume>((e) => MangaVolume.fromJson(e))
+        .toList();
+    return MangaAggregate(volumes: volumes);
+  }
+}
+
+class MangaStatistics {
+  double average;
+  Map<String, dynamic> distribution;
+  int totalRaters;
+  int follows;
+  bool follow;
+  int rating;
+  MangaStatistics({
+    required this.average,
+    required this.distribution,
+    required this.totalRaters,
+    required this.follows,
+    required this.follow,
+    required this.rating,
+  });
+
+  factory MangaStatistics.fromJson(Map<String, dynamic> json) {
+    int totalRaters = 0;
+    json["distribution"].values.forEach((e) {
+      totalRaters += int.parse(e.toString());
+    });
+    return MangaStatistics(
+      average: json["average"] ?? 0.0,
+      distribution: json["distribution"],
+      totalRaters: totalRaters,
+      follows: json["follows"] ?? 0,
+      follow: json["follow"],
+      rating: json["rating"],
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
+import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/search.dart';
 import 'settings.dart';
@@ -19,8 +20,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 2;
   late CupertinoNavigationBar searchInput;
+  late MangaAggregate ma;
   List<Widget> homepage = [
-    Container(
+    SizedBox(
       child: ExploreManga(),
     ),
     SizedBox(
@@ -42,53 +44,62 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
     ),
     Library(),
-    const Settings()
+    const Settings(),
   ];
 
   @override
   void initState() {
     searchInput = CupertinoNavigationBar(
-      leading: IconButton(
-        onPressed: () {},
-        icon: const Icon(
-          CupertinoIcons.search,
+      leading: Material(
+        color: Colors.transparent,
+        child: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            CupertinoIcons.search,
+          ),
         ),
       ),
-      trailing: IconButton(
-        onPressed: () {},
-        icon: const Icon(
-          CupertinoIcons.slider_horizontal_3,
+      trailing: Material(
+        color: Colors.transparent,
+        child: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            CupertinoIcons.slider_horizontal_3,
+          ),
         ),
       ),
-      middle: TextField(
-        decoration: const InputDecoration(
-          hintText: "Search",
-          border: InputBorder.none,
-        ),
-        controller: searchedManga,
-        onChanged: (value) {
-          if (searchedManga.text.isEmpty) {
-            if (isSearch) {
+      middle: Material(
+        color: Colors.transparent,
+        child: TextField(
+          decoration: const InputDecoration(
+            hintText: "Search",
+            border: InputBorder.none,
+          ),
+          controller: searchedManga,
+          onChanged: (value) {
+            if (searchedManga.text.isEmpty) {
+              if (isSearch) {
+                setState(() {
+                  mangaSearching.ignore();
+                  isSearch = false;
+                });
+              }
+            }
+          },
+          onSubmitted: (value) {
+            if (searchedManga.text.isNotEmpty) {
+              setState(() {
+                isSearch = true;
+                mangaSearching = searchmanga(searchedManga.text, '50', '0');
+              });
+            } else {
               setState(() {
                 mangaSearching.ignore();
                 isSearch = false;
               });
             }
-          }
-        },
-        onSubmitted: (value) {
-          if (searchedManga.text.isNotEmpty) {
-            setState(() {
-              isSearch = true;
-              mangaSearching = searchmanga(searchedManga.text, '50', '0');
-            });
-          } else {
-            setState(() {
-              mangaSearching.ignore();
-              isSearch = false;
-            });
-          }
-        },
+          },
+        ),
       ),
     );
     super.initState();
@@ -227,17 +238,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             child: Column(
               children: [
                 (currentIndex == 1 && deviceMode == Orientation.landscape)
-                    ? Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.black26,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: (searchInput),
-                        ),
-                      )
-                    : (SizedBox()),
+                    ? (searchInput)
+                    : (const SizedBox()),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(

@@ -15,31 +15,31 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.network(
-                "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/anime_spirited_away_no_face_nobody-512.png",
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.network(
+              "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/anime_spirited_away_no_face_nobody-512.png",
             ),
-            Text(
-              usr.username,
-            ),
-            ListTile(
-              onTap: () {
-                sharedPreferences.clear();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Login()),
-                    (route) => false);
-              },
-              title: const Text("LogOut!"),
-            )
-          ],
-        ),
+          ),
+          Text(
+            usr.username,
+          ),
+          ListTile(
+            onTap: () {
+              sharedPreferences.clear();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                  (route) => false);
+            },
+            title: const Text("LogOut!"),
+          )
+        ],
       ),
     );
   }

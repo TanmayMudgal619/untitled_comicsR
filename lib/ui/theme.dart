@@ -68,7 +68,7 @@ ThemeData dark = ThemeData(
   primaryColor: Colors.white,
   primaryColorBrightness: Brightness.dark,
   primaryColorLight: const Color(0xFF191A1C),
-  primaryColorDark: Colors.black12,
+  primaryColorDark: const Color(0xFF191A1C),
   canvasColor: const Color(0xFF191A1C),
   shadowColor: Colors.white12,
   scaffoldBackgroundColor: const Color(0xFF191A1C),

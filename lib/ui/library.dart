@@ -33,25 +33,32 @@ class _LibraryState extends State<Library> {
             !element.value["scroll"].position.outOfRange &&
             element.value["next"] &&
             !element.value["loading"]) {
-          setState(() {
-            element.value["loading"] = true;
-            element.value["off"] += 100;
-            getmangalist(
-                    element.value["data"].sublist(
-                        element.value["off"],
-                        (element.value["data"].length - element.value["off"] >=
-                                100)
-                            ? (100)
-                            : (null)),
-                    '100')
-                .then((value) => setState(() {
-                      element.value["loaded"].addAll(value);
-                      element.value["loading"] = false;
-                      if (value.length < 100) {
-                        element.value["next"] = false;
-                      }
-                    }));
-          });
+          if (mounted) {
+            setState(() {
+              element.value["loading"] = true;
+              element.value["off"] += 100;
+              getmangalist(
+                      element.value["data"].sublist(
+                          element.value["off"],
+                          (element.value["data"].length -
+                                      element.value["off"] >=
+                                  100)
+                              ? (100)
+                              : (null)),
+                      '100')
+                  .then((value) {
+                if (mounted) {
+                  setState(() {
+                    element.value["loaded"].addAll(value);
+                    element.value["loading"] = false;
+                    if (value.length < 100) {
+                      element.value["next"] = false;
+                    }
+                  });
+                }
+              });
+            });
+          }
         }
       });
       if (element.value["data"] != null) {
@@ -64,18 +71,22 @@ class _LibraryState extends State<Library> {
                         : (null)),
                 '100')
             .then((value) {
-          setState(() {
-            element.value["loading"] = false;
-            element.value["loaded"].addAll(value);
-            if (value.length < 100) {
-              element.value["next"] = false;
-            }
-          });
+          if (mounted) {
+            setState(() {
+              element.value["loading"] = false;
+              element.value["loaded"].addAll(value);
+              if (value.length < 100) {
+                element.value["next"] = false;
+              }
+            });
+          }
         });
       } else {
-        setState(() {
-          element.value["next"] = false;
-        });
+        if (mounted) {
+          setState(() {
+            element.value["next"] = false;
+          });
+        }
       }
     });
     super.initState();
@@ -100,6 +111,9 @@ class _LibraryState extends State<Library> {
                         ),
                       ))
                   .toList(),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Flexible(
                 fit: FlexFit.loose,

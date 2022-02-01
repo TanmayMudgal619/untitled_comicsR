@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
-import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/ui/manga.dart';
+import 'package:untitledcomics/ui/show.dart';
 import 'mangatile.dart';
 
 class MangaRow extends StatelessWidget {
@@ -34,7 +34,11 @@ class MangaRow extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          ShowManga(title: title, mangas: mangaList)));
+                },
                 icon: const Icon(
                   CupertinoIcons.forward,
                 ),
@@ -49,6 +53,7 @@ class MangaRow extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: mangaList
+                  .sublist(0, 10)
                   .map(
                     (e) => Padding(
                         padding: const EdgeInsets.only(left: 10),
@@ -171,17 +176,21 @@ class _SlideShowState extends State<SlideShow> {
 }
 
 class ExpandWidget extends StatefulWidget {
-  String heading;
-  Widget child;
-  ExpandWidget({Key? key, required this.heading, required this.child})
-      : super(key: key);
+  final String heading;
+  final Widget child;
+  bool expanded;
+  ExpandWidget({
+    Key? key,
+    required this.heading,
+    required this.child,
+    required this.expanded,
+  }) : super(key: key);
 
   @override
   _ExpandWidgetState createState() => _ExpandWidgetState();
 }
 
 class _ExpandWidgetState extends State<ExpandWidget> {
-  bool expanded = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -198,21 +207,21 @@ class _ExpandWidgetState extends State<ExpandWidget> {
             trailing: IconButton(
                 onPressed: () {
                   setState(() {
-                    expanded = !expanded;
+                    widget.expanded = !widget.expanded;
                   });
                 },
                 icon: Icon(
-                  (expanded)
+                  (widget.expanded)
                       ? (CupertinoIcons.chevron_up)
                       : (CupertinoIcons.chevron_down),
                 )),
           ),
-          (expanded)
+          (widget.expanded)
               ? (ListTile(
                   dense: true,
                   title: widget.child,
                 ))
-              : (SizedBox(
+              : (const SizedBox(
                   width: 0,
                   height: 0,
                 )),

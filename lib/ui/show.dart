@@ -26,22 +26,25 @@ class _ShowMangaState extends State<ShowManga> {
           style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
         ),
       ),
-      body: GridView.builder(
-          primary: false,
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: ((deviceMode == Orientation.landscape)
-                    ? (size.width - size.width * 0.4)
-                    : (size.width)) ~/
-                105,
-            childAspectRatio: 105 / 160,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 5,
-          ),
-          itemCount: widget.mangas.length,
-          itemBuilder: (context, val) {
-            return MangaTile(manga: widget.mangas[val]);
-          }),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+            primary: false,
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: ((deviceMode == Orientation.landscape)
+                      ? (size.width - size.width * 0.4)
+                      : (size.width)) ~/
+                  105,
+              childAspectRatio: 105 / 160,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 5,
+            ),
+            itemCount: widget.mangas.length,
+            itemBuilder: (context, val) {
+              return MangaTile(manga: widget.mangas[val]);
+            }),
+      ),
     );
   }
 }

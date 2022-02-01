@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
+import 'package:untitledcomics/ui/chapter.dart';
 
 class MangaPageChapter extends StatefulWidget {
   final String id;
@@ -37,7 +38,8 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
             } else {
               if (snapshot.data!.isEmpty) {
                 widget.next = false;
-                return const Text("No Chapters for Selected Language!");
+                return const Center(
+                    child: Text("No Chapters for Selected Language!"));
               }
               if (snapshot.data!.length != 100) {
                 widget.next = false;
@@ -54,11 +56,16 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                             ),
                           ),
                           child: ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Chapter(
+                                            chapter: e,
+                                          )));
+                            },
                             title: Text(
-                              (e.title.isEmpty || e.title == "null")
-                                  ? ("Chapter ${e.chapter}")
-                                  : (e.title),
+                              e.title,
                             ),
                             isThreeLine: true,
                             subtitle: Text(

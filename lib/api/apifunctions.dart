@@ -47,7 +47,7 @@ Future<List<Manga>> getmangalisttag(
       "includedTags[]": ids,
       "publicationDemographic[]": demo,
       "limit": limit,
-      "includedTagsMode": "OR",
+      // "includedTagsMode": "OR",
       "includes[]": ["author", "artist", "cover_art"],
     });
   } else {
@@ -55,7 +55,7 @@ Future<List<Manga>> getmangalisttag(
       "includedTags[]": ids,
       "limit": limit,
       "includes[]": ["author", "artist", "cover_art"],
-      "includedTagsMode": "OR",
+      // "includedTagsMode": "OR",
     });
   }
   var response = await https.get(url);
@@ -130,14 +130,12 @@ Future<String> getcover(var id) async {
 }
 
 Future<GetChapterImg> getchapterimage(String id) async {
-  var url = Uri.http("api.mangadex.org", "/chapter/$id");
   var surl = Uri.http("api.mangadex.org", "/at-home/server/$id");
-  var response = await https.get(url);
   var sresponse = await https.get(surl);
-  if (response.statusCode == 200) {
-    var jsondata = jsonDecode(response.body)["data"]["attributes"];
-    var baseUrl = jsonDecode(sresponse.body)["baseUrl"];
-    return GetChapterImg(baseUrl, jsondata["data"], jsondata["dataSaver"]);
+  if (sresponse.statusCode == 200) {
+    var baseUrl = jsonDecode(sresponse.body);
+    return GetChapterImg(baseUrl["baseUrl"], baseUrl["chapter"]["hash"],
+        baseUrl["chapter"]["data"], baseUrl["chapter"]["dataSaver"]);
   } else {
     throw Exception("Not Able to Load Images");
   }
@@ -321,12 +319,49 @@ Future<Map<String, dynamic>> getlibrary() async {
   }
 }
 
-Future<Map<String, dynamic>> getMangaRating(String id) async {
+Future<MangaStatistics> getMangaStatistics(String id) async {
+  usr.refreshSession();
   var url = Uri.https("api.mangadex.org", "/statistics/manga/$id");
+  var url1 = Uri.https("api.mangadex.org", "/user/follows/manga/$id");
+  var url2 = Uri.https("api.mangadex.org", "/rating");
+  var response = await https.get(url);
+  var response1 = await https.get(
+    url1,
+    headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"},
+  );
+  var response2 = await https.get(url2,
+      headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"});
+
+  if (response.statusCode == 200 && response2.statusCode == 200) {
+    var rating = 0;
+    if (jsonDecode(response2.body)["ratings"].isEmpty == false) {
+      rating = jsonDecode(response2.body)["ratings"][id]["rating"];
+    }
+    Map<String, dynamic> statistics =
+        jsonDecode(response.body)["statistics"][id]["rating"];
+    statistics.addEntries({
+      MapEntry("follow", (response1.statusCode == 200)),
+      MapEntry("rating", rating),
+    });
+    return MangaStatistics.fromJson(statistics);
+  } else {
+    throw Exception("Error ${response.statusCode} / ${response2.statusCode}");
+  }
+}
+
+Future<MangaAggregate> getAggregate(String id) async {
+  var url = Uri.https(
+    "api.mangadex.org",
+    "/manga/$id/aggregate",
+    {
+      "translatedLanguage[]": "en",
+    },
+  );
   var response = await https.get(url);
   if (response.statusCode == 200) {
-    return jsonDecode(response.body)["statistics"][id]["rating"];
+    var json = jsonDecode(response.body);
+    return MangaAggregate.fromJson(json);
   } else {
-    throw Exception("Error ${response.statusCode}");
+    throw Exception("MARA LI: ${response.statusCode}");
   }
 }

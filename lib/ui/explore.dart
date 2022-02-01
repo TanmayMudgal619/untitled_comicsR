@@ -53,7 +53,7 @@ class _ExploreMangaState extends State<ExploreManga> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10, bottom: 2),
+                            padding: const EdgeInsets.only(bottom: 2),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -67,22 +67,27 @@ class _ExploreMangaState extends State<ExploreManga> {
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ShowManga(
-                                          title: genres[e.key]!,
-                                          mangas: e.value.toList(),
+                                (e.value.length > 9)
+                                    ? (IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ShowManga(
+                                                title: genres[e.key]!,
+                                                mangas: e.value.toList(),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          CupertinoIcons.forward,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    CupertinoIcons.forward,
-                                  ),
-                                ),
+                                      ))
+                                    : (const SizedBox(
+                                        width: 0,
+                                        height: 0,
+                                      )),
                               ],
                             ),
                           ),
