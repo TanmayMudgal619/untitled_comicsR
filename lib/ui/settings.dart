@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:untitledcomics/set.dart';
 import 'package:untitledcomics/ui/login.dart';
 
 class Settings extends StatefulWidget {
@@ -17,7 +18,6 @@ class _SettingsState extends State<Settings> {
     return SizedBox(
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
             width: 100,
@@ -32,6 +32,8 @@ class _SettingsState extends State<Settings> {
           ListTile(
             onTap: () {
               sharedPreferences.clear();
+              set();
+              get();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const Login()),

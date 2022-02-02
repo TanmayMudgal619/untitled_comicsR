@@ -144,39 +144,46 @@ class _MangaPageState extends State<MangaPage> {
                                                 ),
                                               ),
                                             ),
-                                            ExpandWidget(
-                                              heading: "My Rating",
-                                              child: StatefulBuilder(
-                                                builder:
-                                                    (context, setSliderState) {
-                                                  return Slider(
-                                                    divisions: 9,
-                                                    label: rating.toString(),
-                                                    thumbColor:
-                                                        Theme.of(context)
-                                                            .primaryColor,
-                                                    activeColor:
-                                                        Theme.of(context)
-                                                            .primaryColor,
-                                                    inactiveColor:
-                                                        Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(0.4),
-                                                    value: (rating != 0)
-                                                        ? (rating)
-                                                        : (1),
-                                                    min: 1,
-                                                    max: 10,
-                                                    onChanged: (value) {
-                                                      setSliderState(() {
-                                                        rating = value;
-                                                      });
-                                                    },
-                                                  );
-                                                },
-                                              ),
-                                              expanded: false,
-                                            ),
+                                            (login)
+                                                ? (ExpandWidget(
+                                                    heading: "My Rating",
+                                                    child: StatefulBuilder(
+                                                      builder: (context,
+                                                          setSliderState) {
+                                                        return Slider(
+                                                          divisions: 9,
+                                                          label:
+                                                              rating.toString(),
+                                                          thumbColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          activeColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          inactiveColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      0.4),
+                                                          value: (rating != 0)
+                                                              ? (rating)
+                                                              : (1),
+                                                          min: 1,
+                                                          max: 10,
+                                                          onChanged: (value) {
+                                                            setSliderState(() {
+                                                              rating = value;
+                                                            });
+                                                          },
+                                                        );
+                                                      },
+                                                    ),
+                                                    expanded: false,
+                                                  ))
+                                                : (const SizedBox(
+                                                    height: 0,
+                                                    width: 0,
+                                                  )),
                                             ExpandWidget(
                                               heading: "Ratings",
                                               child: Column(

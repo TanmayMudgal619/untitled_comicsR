@@ -5,6 +5,8 @@ import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/search.dart';
+import 'package:flutter/services.dart';
+import 'theme.dart';
 import 'settings.dart';
 import 'helper.dart';
 import 'library.dart';
@@ -43,8 +45,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
     ),
-    Library(),
-    const Settings(),
+    (incognitoMode) ? (const LoginButton()) : (Library()),
+    (incognitoMode) ? (const LoginButton()) : (const Settings()),
   ];
 
   @override

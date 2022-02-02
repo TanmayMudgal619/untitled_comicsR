@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/ui/login.dart';
 import 'package:untitledcomics/ui/manga.dart';
 import 'package:untitledcomics/ui/show.dart';
 import 'mangatile.dart';
@@ -227,6 +228,23 @@ class _ExpandWidgetState extends State<ExpandWidget> {
                 )),
         ],
       ),
+    );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  const LoginButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: (TextButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const Login()));
+        },
+        child: const Text("Login First!"),
+      )),
     );
   }
 }

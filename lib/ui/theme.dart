@@ -53,6 +53,7 @@ ThemeData light = ThemeData(
   cupertinoOverrideTheme: const CupertinoThemeData(
     barBackgroundColor: Colors.transparent,
     primaryColor: Colors.black,
+    brightness: Brightness.light,
   ),
   textTheme: const TextTheme(
     bodyText1: TextStyle(color: Colors.black),
@@ -116,6 +117,7 @@ ThemeData dark = ThemeData(
   cupertinoOverrideTheme: const CupertinoThemeData(
     barBackgroundColor: Colors.transparent,
     primaryColor: Colors.white,
+    brightness: Brightness.dark,
   ),
   textTheme: const TextTheme(
     bodyText1: TextStyle(color: Colors.white),

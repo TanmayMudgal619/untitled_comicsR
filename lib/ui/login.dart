@@ -22,10 +22,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
+      appBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
         middle: Text(
           "Login",
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -166,10 +167,17 @@ class _LoginState extends State<Login> {
                       ),
                       leading: const Icon(Icons.person_off_rounded),
                       onTap: () {
-                        incognitoMode = true;
+                        sharedPreferences.clear();
+                        set();
+                        get();
                         sharedPreferences.setBool("incognitoMode", true);
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => Loading()));
+                        incognitoMode = true;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Loading(),
+                          ),
+                        );
                       },
                       title: const Text(
                         "Incognito",

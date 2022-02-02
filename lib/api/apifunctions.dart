@@ -320,32 +320,52 @@ Future<Map<String, dynamic>> getlibrary() async {
 }
 
 Future<MangaStatistics> getMangaStatistics(String id) async {
-  usr.refreshSession();
+  if (login) {
+    usr.refreshSession();
+  }
   var url = Uri.https("api.mangadex.org", "/statistics/manga/$id");
-  var url1 = Uri.https("api.mangadex.org", "/user/follows/manga/$id");
-  var url2 = Uri.https("api.mangadex.org", "/rating");
-  var response = await https.get(url);
-  var response1 = await https.get(
-    url1,
-    headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"},
-  );
-  var response2 = await https.get(url2,
-      headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"});
-
-  if (response.statusCode == 200 && response2.statusCode == 200) {
+  // var response = await https.get(url);
+  List<Future<https.Response>> allurls = [];
+  allurls.add(https.get(url));
+  if (login) {
+    var url1 = Uri.https("api.mangadex.org", "/user/follows/manga/$id");
+    var url2 = Uri.https("api.mangadex.org", "/rating");
+    allurls.addAll([
+      https.get(
+        url1,
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"
+        },
+      ),
+      https.get(url2, headers: {
+        HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"
+      })
+    ]);
+  }
+  var response = await Future.wait(allurls);
+  if (response[0].statusCode == 200 &&
+      (!login || response[2].statusCode == 200)) {
     var rating = 0;
-    if (jsonDecode(response2.body)["ratings"].isEmpty == false) {
-      rating = jsonDecode(response2.body)["ratings"][id]["rating"];
-    }
     Map<String, dynamic> statistics =
-        jsonDecode(response.body)["statistics"][id]["rating"];
-    statistics.addEntries({
-      MapEntry("follow", (response1.statusCode == 200)),
-      MapEntry("rating", rating),
-    });
+        jsonDecode(response[0].body)["statistics"][id]["rating"];
+    if (login) {
+      if (jsonDecode(response[2].body)["ratings"].isEmpty == false) {
+        rating = jsonDecode(response[2].body)["ratings"][id]["rating"];
+      }
+      statistics.addEntries({
+        MapEntry("follow", (response[1].statusCode == 200)),
+        MapEntry("rating", rating),
+      });
+    } else {
+      statistics.addEntries({
+        const MapEntry("follow", false),
+        MapEntry("rating", rating),
+      });
+    }
     return MangaStatistics.fromJson(statistics);
   } else {
-    throw Exception("Error ${response.statusCode} / ${response2.statusCode}");
+    throw Exception(
+        "Error ${response[0].statusCode} / ${response[2].statusCode}");
   }
 }
 

@@ -11,6 +11,7 @@ late Set<String> searchHistory;
 late bool incognitoMode;
 late bool login;
 late bool dataSaver;
+late String lang;
 late List<Manga> latestManga;
 late List<Manga> updatedManga;
 late List<Manga> slideshowManga;

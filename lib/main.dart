@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/loading.dart';
 import 'package:untitledcomics/ui/login.dart';
@@ -28,11 +27,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
-    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Untitled Comics",
