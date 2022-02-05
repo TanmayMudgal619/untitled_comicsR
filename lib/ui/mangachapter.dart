@@ -12,7 +12,7 @@ class MangaPageChapter extends StatefulWidget {
   bool prev = false;
   MangaPageChapter({Key? key, required this.id}) : super(key: key) {
     offSet = 0;
-    chapterLoader = getChapters(id, 100, offSet, "asc", "asc", "en");
+    chapterLoader = getChapters(id, 100, offSet, "asc", "asc");
   }
 
   @override
@@ -99,7 +99,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                   }
                                   widget.next = true;
                                   widget.chapterLoader = getChapters(widget.id,
-                                      100, widget.offSet, "asc", "asc", "en");
+                                      100, widget.offSet, "asc", "asc");
                                 });
                               })
                             : (null),
@@ -127,7 +127,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                   widget.offSet += 100;
                                   widget.prev = true;
                                   widget.chapterLoader = getChapters(widget.id,
-                                      100, widget.offSet, "asc", "asc", "en");
+                                      100, widget.offSet, "asc", "asc");
                                 });
                               })
                             : (null),

@@ -198,8 +198,8 @@ Future<List<List<Manga>>> homeload() async {
   }
 }
 
-Future<List<MangaChapterData>> getChapters(String id, int limit, int offset,
-    String orderc, String orderv, String lang) async {
+Future<List<MangaChapterData>> getChapters(
+    String id, int limit, int offset, String orderc, String orderv) async {
   var url;
   if (lang == 'any') {
     url = Uri.https("api.mangadex.org", "/manga/$id/feed", {
@@ -373,9 +373,11 @@ Future<MangaAggregate> getAggregate(String id) async {
   var url = Uri.https(
     "api.mangadex.org",
     "/manga/$id/aggregate",
-    {
-      "translatedLanguage[]": "en",
-    },
+    (lang == "any")
+        ? ({})
+        : ({
+            "translatedLanguage[]": lang,
+          }),
   );
   var response = await https.get(url);
   if (response.statusCode == 200) {

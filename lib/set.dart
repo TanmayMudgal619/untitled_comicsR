@@ -3,7 +3,7 @@ import 'globals/user_choice.dart';
 
 void set() {
   sharedPreferences.setBool("set", true);
-  sharedPreferences.setString("lang", "en");
+  sharedPreferences.setString("lang", "any");
   sharedPreferences.setBool("incognitoMode", false);
   sharedPreferences.setBool("dataSaver", false);
   sharedPreferences.setBool("login", false);

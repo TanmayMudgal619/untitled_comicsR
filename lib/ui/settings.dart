@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/set.dart';
 import 'package:untitledcomics/ui/login.dart';
 
@@ -22,9 +23,7 @@ class _SettingsState extends State<Settings> {
           SizedBox(
             width: 100,
             height: 100,
-            child: Image.network(
-              "https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/anime_spirited_away_no_face_nobody-512.png",
-            ),
+            child: Image.asset("assets/images/logo.png"),
           ),
           Text(
             usr.username,
@@ -45,6 +44,40 @@ class _SettingsState extends State<Settings> {
                     sharedPreferences.setBool("dataSaver", dataSaver);
                   });
                 }),
+          ),
+          ListTile(
+            onTap: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    return Center(
+                      child: Container(
+                        width: 300,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorDark,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: CupertinoPicker(
+                          itemExtent: 40.0,
+                          magnification: 1.2,
+                          useMagnifier: true,
+                          looping: true,
+                          onSelectedItemChanged: (value) {
+                            setState(() {
+                              lang = languages[value];
+                              sharedPreferences.setString("lang", lang);
+                            });
+                          },
+                          children: languages.map((e) => Text(e)).toList(),
+                        ),
+                      ),
+                    );
+                  });
+            },
+            title: const Text("Language"),
+            trailing: Text(lang.toUpperCase()),
           ),
           ListTile(
             onTap: () {
