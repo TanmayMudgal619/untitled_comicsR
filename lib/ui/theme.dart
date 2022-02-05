@@ -17,6 +17,12 @@ ThemeData light = ThemeData(
   dialogBackgroundColor: Colors.white,
   indicatorColor: Colors.black54,
   cursorColor: Colors.black,
+  radioTheme: RadioThemeData(
+    fillColor: MaterialStateProperty.all(Colors.black),
+    overlayColor: MaterialStateProperty.all(
+      Colors.grey.shade300,
+    ),
+  ),
   primarySwatch: const MaterialColor(0xFFFFFFFF, <int, Color>{
     50: Color(0xFF000000),
     100: Color(0xFF000000),
@@ -81,6 +87,12 @@ ThemeData dark = ThemeData(
   backgroundColor: Colors.white,
   indicatorColor: Colors.white,
   cursorColor: Colors.white,
+  radioTheme: RadioThemeData(
+    fillColor: MaterialStateProperty.all(Colors.white),
+    overlayColor: MaterialStateProperty.all(
+      Colors.grey.shade300,
+    ),
+  ),
   drawerTheme: const DrawerThemeData(
     backgroundColor: Colors.black12,
     elevation: 0,

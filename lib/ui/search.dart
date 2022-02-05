@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'mangatile.dart';

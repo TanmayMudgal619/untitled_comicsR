@@ -24,6 +24,7 @@ Map<String, List<String>> allComics = {
   "dropped": [],
   "re_reading": [],
   "completed": [],
+  "none": [],
 };
 Map<String, Map<String, dynamic>> allStatus = {};
 

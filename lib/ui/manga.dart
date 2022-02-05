@@ -26,22 +26,27 @@ class _MangaPageState extends State<MangaPage> {
   late Future<MangaStatistics> mangaStatisticsLoader;
   late MangaStatistics mangaStatistics;
   late Future<MangaAggregate> mangaAggregate;
-  late String mangaReadingStatus;
+  String mangaReadingStatus = "none";
   int currentIndexL = 0;
   int currentIndexP = 0;
   double rating = 0.0;
   @override
   void initState() {
-    mangaHeader = MangaHeader(manga: widget.mangaOpened);
+    if (login) {
+      for (var status in allComics.entries) {
+        if (status.value.contains(widget.mangaOpened.id)) {
+          mangaReadingStatus = status.key;
+        }
+      }
+    }
+    mangaHeader = MangaHeader(
+      manga: widget.mangaOpened,
+      mangaReadingStatus: mangaReadingStatus,
+    );
 
     mangaInfo = MangaInfo(
       manga: widget.mangaOpened,
     );
-    for (var status in allComics.entries) {
-      if (status.value.contains(widget.mangaOpened.id)) {
-        mangaReadingStatus = status.key;
-      }
-    }
 
     mangaStatisticsLoader =
         getMangaStatistics(widget.mangaOpened.id).then((value) {
@@ -90,7 +95,6 @@ class _MangaPageState extends State<MangaPage> {
                 );
               default:
                 if (snapshot.hasError) {
-                  print(snapshot.error.toString());
                   return const Icon(
                     CupertinoIcons.circle_fill,
                     color: Colors.redAccent,
@@ -215,7 +219,7 @@ class _MangaPageState extends State<MangaPage> {
                               );
                             });
                       },
-                      icon: const Icon(CupertinoIcons.star_fill),
+                      icon: const Icon(Icons.star_border_rounded),
                     ),
                   );
                 }
@@ -266,7 +270,7 @@ class _MangaPageState extends State<MangaPage> {
                 ))
               ],
             )
-          : Container(
+          : SizedBox(
               width: size.width,
               child: NestedScrollView(
                 headerSliverBuilder: (context, val) {
@@ -297,10 +301,17 @@ class _MangaPageState extends State<MangaPage> {
   }
 }
 
-class MangaHeader extends StatelessWidget {
+class MangaHeader extends StatefulWidget {
   Manga manga;
-  MangaHeader({Key? key, required this.manga}) : super(key: key);
+  String mangaReadingStatus;
+  MangaHeader({Key? key, required this.manga, required this.mangaReadingStatus})
+      : super(key: key);
 
+  @override
+  State<MangaHeader> createState() => _MangaHeaderState();
+}
+
+class _MangaHeaderState extends State<MangaHeader> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -309,13 +320,13 @@ class MangaHeader extends StatelessWidget {
         decoration: BoxDecoration(
             image: DecorationImage(
               image: CachedNetworkImageProvider(
-                manga.cover,
+                widget.manga.cover,
               ),
               fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -336,9 +347,153 @@ class MangaHeader extends StatelessWidget {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(10),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: manga.cover,
-                    width: 130,
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: widget.manga.cover,
+                        width: 130,
+                      ),
+                      (login)
+                          ? (Positioned(
+                              right: 5,
+                              top: 5,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    color: Colors.black87,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100))),
+                                child: IconButton(
+                                    iconSize: 20,
+                                    padding: EdgeInsets.zero,
+                                    visualDensity: VisualDensity.compact,
+                                    onPressed: () {
+                                      showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (context) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  width: 300,
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .primaryColorDark,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                  ),
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                        children: allComics.keys
+                                                            .map(
+                                                              (e) => ListTile(
+                                                                visualDensity:
+                                                                    VisualDensity
+                                                                        .compact,
+                                                                dense: true,
+                                                                leading: Radio(
+                                                                  value: e,
+                                                                  groupValue: widget
+                                                                      .mangaReadingStatus,
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    setState(
+                                                                        () {
+                                                                      setReadingStatus(
+                                                                        widget
+                                                                            .manga
+                                                                            .id,
+                                                                        value
+                                                                            .toString(),
+                                                                      );
+                                                                      if (widget
+                                                                              .mangaReadingStatus !=
+                                                                          "") {
+                                                                        allComics[widget.mangaReadingStatus]!
+                                                                            .remove(
+                                                                          widget
+                                                                              .manga
+                                                                              .id,
+                                                                        );
+                                                                      }
+                                                                      widget.mangaReadingStatus =
+                                                                          value
+                                                                              .toString();
+                                                                      if (value !=
+                                                                          "none") {
+                                                                        allComics[value]!.add(widget
+                                                                            .manga
+                                                                            .id);
+                                                                      }
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                ),
+                                                                title: Text(
+                                                                  e
+                                                                      .replaceAll(
+                                                                          "_",
+                                                                          " ")
+                                                                      .toUpperCase(),
+                                                                ),
+                                                              ),
+                                                            )
+                                                            .toList()),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: Icon(
+                                      ((widget.mangaReadingStatus == "dropped")
+                                          ? (Icons.bookmark_remove_rounded)
+                                          : ((widget.mangaReadingStatus ==
+                                                  "re_reading")
+                                              ? (Icons.bookmarks_rounded)
+                                              : ((widget.mangaReadingStatus ==
+                                                      "completed")
+                                                  ? (Icons
+                                                      .bookmark_added_rounded)
+                                                  : (Icons.bookmark)))),
+                                      size: 20,
+                                      color: ((widget.mangaReadingStatus ==
+                                              "reading")
+                                          ? (Colors.blueAccent)
+                                          : ((widget.mangaReadingStatus ==
+                                                  "dropped")
+                                              ? (Colors.deepOrangeAccent)
+                                              : ((widget.mangaReadingStatus ==
+                                                      "plan_to_read")
+                                                  ? (Colors.lightBlueAccent)
+                                                  : ((widget.mangaReadingStatus ==
+                                                          "completed")
+                                                      ? (Colors.green)
+                                                      : ((widget.mangaReadingStatus ==
+                                                              "re_reading")
+                                                          ? (Colors.green)
+                                                          : ((widget.mangaReadingStatus ==
+                                                                  "on_hold")
+                                                              ? (Colors.orange)
+                                                              : (Colors
+                                                                  .white))))))),
+                                    )),
+                              ),
+                            ))
+                          : (const SizedBox(
+                              width: 0,
+                              height: 0,
+                            )),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -348,7 +503,7 @@ class MangaHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          manga.title,
+                          widget.manga.title,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -356,19 +511,19 @@ class MangaHeader extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          manga.authors.join(),
+                          widget.manga.authors.join(),
                         ),
                         Text(
-                          manga.artists.join(),
+                          widget.manga.artists.join(),
                         ),
                         const Padding(
                           padding: EdgeInsets.all(3),
                         ),
                         Text(
-                          "Volume: ${(manga.lastvolume.isEmpty) ? ('N/A') : (manga.lastvolume)}",
+                          "Volume: ${(widget.manga.lastvolume.isEmpty) ? ('N/A') : (widget.manga.lastvolume)}",
                         ),
                         Text(
-                          "Chapter: ${(manga.lastchapter.isEmpty) ? ('N/A') : (manga.lastchapter)}",
+                          "Chapter: ${(widget.manga.lastchapter.isEmpty) ? ('N/A') : (widget.manga.lastchapter)}",
                         ),
                         const Padding(
                           padding: EdgeInsets.all(3),
@@ -386,18 +541,18 @@ class MangaHeader extends StatelessWidget {
                                 Icon(
                                   Icons.circle,
                                   size: 12,
-                                  color: (manga.status == "ongoing")
+                                  color: (widget.manga.status == "ongoing")
                                       ? (Colors.blueAccent)
-                                      : ((manga.status == "completed")
+                                      : ((widget.manga.status == "completed")
                                           ? (Colors.green)
-                                          : ((manga.status == "hiatus")
+                                          : ((widget.manga.status == "hiatus")
                                               ? (Colors.orange)
                                               : (Colors.red))),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 3.0),
                                   child: Text(
-                                    manga.status.toUpperCase(),
+                                    widget.manga.status.toUpperCase(),
                                     style: const TextStyle(fontSize: 11),
                                   ),
                                 ),
@@ -414,7 +569,7 @@ class MangaHeader extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Text(
-                              manga.publicationDemographic.toUpperCase(),
+                              widget.manga.publicationDemographic.toUpperCase(),
                               style: const TextStyle(fontSize: 11),
                             ),
                           ),
@@ -500,7 +655,7 @@ class _MangaBodyState extends State<MangaBody> {
                     : (null),
                 decoration: BoxDecoration(
                   borderRadius: (deviceMode == Orientation.landscape)
-                      ? (BorderRadius.all(Radius.circular(10)))
+                      ? (const BorderRadius.all(Radius.circular(10)))
                       : (null),
                 ),
                 child: Column(
@@ -645,7 +800,7 @@ class _MangaBasedState extends State<MangaBased> {
               return Center(
                 child: Text(
                   snapshot.error.toString(),
-                  style: TextStyle(color: Colors.white54),
+                  style: const TextStyle(color: Colors.white54),
                 ),
               );
             }

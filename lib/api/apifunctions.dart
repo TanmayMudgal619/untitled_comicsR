@@ -385,3 +385,20 @@ Future<MangaAggregate> getAggregate(String id) async {
     throw Exception("MARA LI: ${response.statusCode}");
   }
 }
+
+Future<void> setReadingStatus(String id, String status) async {
+  await usr.refreshSession();
+  var url = Uri.https("api.mangadex.org", "/manga/$id/status");
+  var response = await https.post(
+    url,
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}",
+      HttpHeaders.contentTypeHeader: "application/json"
+    },
+    body: jsonEncode({"status": (status == "none") ? (null) : (status)}),
+  );
+
+  if (response.statusCode != 200) {
+    throw (Exception("${response.statusCode}"));
+  }
+}

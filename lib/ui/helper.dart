@@ -243,7 +243,12 @@ class LoginButton extends StatelessWidget {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => const Login()));
         },
-        child: const Text("Login First!"),
+        child: Text(
+          "Login First!",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+          ),
+        ),
       )),
     );
   }

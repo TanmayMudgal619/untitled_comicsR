@@ -69,7 +69,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                             ),
                             isThreeLine: true,
                             subtitle: Text(
-                              "Chapter: ${e.chapter}\nVolume: ${e.volume}",
+                              "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
                             ),
                           ),
                         ),

@@ -5,8 +5,6 @@ import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/search.dart';
-import 'package:flutter/services.dart';
-import 'theme.dart';
 import 'settings.dart';
 import 'helper.dart';
 import 'library.dart';
@@ -120,17 +118,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ? ((currentIndex == 1)
               ? (searchInput)
               : (CupertinoNavigationBar(
-                  middle: (Theme.of(context).brightness == Brightness.light)
-                      ? (ColorFiltered(
-                          colorFilter: const ColorFilter.matrix([
-                            -1, 0, 0, 0, 255, //
-                            0, -1, 0, 0, 255, //
-                            0, 0, -1, 0, 255, //
-                            0, 0, 0, 1, 0, //
-                          ]),
-                          child: Image.asset("assets/images/logo.png"),
-                        ))
-                      : (Image.asset("assets/images/logo.png")),
+                  middle: Image.asset(
+                    "assets/images/logo.png",
+                    width: 50,
+                  ),
                 )))
           : (null),
       body: Row(

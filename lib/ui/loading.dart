@@ -48,9 +48,7 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     deviceMode = MediaQuery.of(context).orientation;
-    var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Center(
         child: Image.asset(
           "assets/images/logo.png",
