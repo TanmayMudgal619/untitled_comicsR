@@ -45,6 +45,10 @@ ThemeData light = ThemeData(
     primaryColorLight: Colors.white,
     valueIndicatorTextStyle: const TextStyle(color: Colors.black54),
   ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.all(Colors.black),
+    trackColor: MaterialStateProperty.all(Colors.grey.shade300),
+  ),
   tabBarTheme: const TabBarTheme(
     indicatorSize: TabBarIndicatorSize.label,
     labelColor: Colors.black,
@@ -92,6 +96,10 @@ ThemeData dark = ThemeData(
     overlayColor: MaterialStateProperty.all(
       Colors.grey.shade300,
     ),
+  ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.all(Colors.white),
+    trackColor: MaterialStateProperty.all(Colors.grey.shade300),
   ),
   drawerTheme: const DrawerThemeData(
     backgroundColor: Colors.black12,

@@ -30,6 +30,23 @@ class _SettingsState extends State<Settings> {
             usr.username,
           ),
           ListTile(
+            title: const Text("Data Saver"),
+            onTap: () {
+              setState(() {
+                dataSaver = !dataSaver;
+                sharedPreferences.setBool("dataSaver", dataSaver);
+              });
+            },
+            trailing: Switch(
+                value: dataSaver,
+                onChanged: (value) {
+                  setState(() {
+                    dataSaver = value;
+                    sharedPreferences.setBool("dataSaver", dataSaver);
+                  });
+                }),
+          ),
+          ListTile(
             onTap: () {
               sharedPreferences.clear();
               set();

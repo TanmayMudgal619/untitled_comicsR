@@ -365,11 +365,13 @@ class _MangaHeaderState extends State<MangaHeader> {
                                         BorderRadius.all(Radius.circular(100))),
                                 child: InkWell(
                                     onLongPress: () {
-                                      setState(() {
-                                        widget.mangaReadingStatus = "none";
-                                        setReadingStatus(widget.manga.id,
-                                            widget.mangaReadingStatus);
-                                      });
+                                      if (widget.mangaReadingStatus != "none") {
+                                        setState(() {
+                                          widget.mangaReadingStatus = "none";
+                                          setReadingStatus(widget.manga.id,
+                                              widget.mangaReadingStatus);
+                                        });
+                                      }
                                     },
                                     onTap: () {
                                       showCupertinoModalPopup(
