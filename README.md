@@ -1,4 +1,4 @@
-# untitledcomics
+# Untitled Comics
 
 An Application for Mangadex Users.
 Find & Read Manga.
