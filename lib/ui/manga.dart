@@ -358,15 +358,20 @@ class _MangaHeaderState extends State<MangaHeader> {
                               right: 5,
                               top: 5,
                               child: Container(
+                                padding: const EdgeInsets.all(8),
                                 decoration: const BoxDecoration(
                                     color: Colors.black87,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(100))),
-                                child: IconButton(
-                                    iconSize: 20,
-                                    padding: EdgeInsets.zero,
-                                    visualDensity: VisualDensity.compact,
-                                    onPressed: () {
+                                child: InkWell(
+                                    onLongPress: () {
+                                      setState(() {
+                                        widget.mangaReadingStatus = "none";
+                                        setReadingStatus(widget.manga.id,
+                                            widget.mangaReadingStatus);
+                                      });
+                                    },
+                                    onTap: () {
                                       showCupertinoModalPopup(
                                         context: context,
                                         builder: (context) {
@@ -414,7 +419,7 @@ class _MangaHeaderState extends State<MangaHeader> {
                                                                       );
                                                                       if (widget
                                                                               .mangaReadingStatus !=
-                                                                          "") {
+                                                                          "none") {
                                                                         allComics[widget.mangaReadingStatus]!
                                                                             .remove(
                                                                           widget
@@ -454,7 +459,7 @@ class _MangaHeaderState extends State<MangaHeader> {
                                         },
                                       );
                                     },
-                                    icon: Icon(
+                                    child: Icon(
                                       ((widget.mangaReadingStatus == "dropped")
                                           ? (Icons.bookmark_remove_rounded)
                                           : ((widget.mangaReadingStatus ==

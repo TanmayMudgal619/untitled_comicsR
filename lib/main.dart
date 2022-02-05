@@ -9,8 +9,6 @@ import 'set.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
-  // await sharedPreferences.clear();
-  // return;
   bool check = sharedPreferences.getBool("set") ?? false;
   if (!check) {
     set();
