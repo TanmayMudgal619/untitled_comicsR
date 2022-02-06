@@ -70,7 +70,17 @@ class _SettingsState extends State<Settings> {
                               sharedPreferences.setString("lang", lang);
                             });
                           },
-                          children: languages.map((e) => Text(e)).toList(),
+                          children: languages
+                              .map((e) => Text(
+                                    e,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                    ),
+                                  ))
+                              .toList(),
                         ),
                       ),
                     );
