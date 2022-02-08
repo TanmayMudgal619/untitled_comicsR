@@ -44,9 +44,6 @@ class _ExploreMangaState extends State<ExploreManga> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: snapshot.data!.entries.map((e) {
-                    var a = Random().nextInt((e.value.length > 9)
-                        ? (e.value.length - 9)
-                        : (e.value.length));
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: Column(
@@ -93,7 +90,7 @@ class _ExploreMangaState extends State<ExploreManga> {
                           ),
                           GV(
                             mangaGV: (e.value.length > 9)
-                                ? (e.value.toList().sublist(a, a + 9))
+                                ? (e.value.toList().sublist(0, 9))
                                 : (e.value.toList()),
                           ),
                         ],
@@ -120,7 +117,7 @@ class GV extends StatelessWidget {
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: ((deviceMode == Orientation.landscape)
-                  ? (size.width - size.width * 0.36)
+                  ? (size.width - size.width * 0.3)
                   : (size.width)) ~/
               105,
           childAspectRatio: 105 / 160,
