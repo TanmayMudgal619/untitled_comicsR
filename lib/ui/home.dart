@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/ui/randommanga.dart';
 import 'package:untitledcomics/ui/search.dart';
 import 'settings.dart';
 import 'helper.dart';
@@ -138,7 +139,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           : (null),
       floatingActionButton: (currentIndex == 0)
           ? (FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RandomManga()));
+              },
               child: const Icon(CupertinoIcons.gift_fill),
             ))
           : (null),

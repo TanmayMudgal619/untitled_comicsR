@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
-import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/ui/manga.dart';
 
 class RandomManga extends StatefulWidget {
   const RandomManga({Key? key}) : super(key: key);
@@ -12,8 +12,6 @@ class RandomManga extends StatefulWidget {
 
 class _RandomMangaState extends State<RandomManga>
     with SingleTickerProviderStateMixin {
-  late Future<Manga> data; //will store the random manga data
-
   late AnimationController _animationController; //controller for fade animation
   late Animation<double> _logoOpacity; //animation to use for the fade animation
 
@@ -28,11 +26,12 @@ class _RandomMangaState extends State<RandomManga>
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
     _animationController.repeat(reverse: true);
-
-    data = randommanga();
-    data.then((value) {
-      //TODO: Put what to do after loading is done.
-      //Probably Navigator.push()
+    randommanga().then((value) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MangaPage(mangaOpened: value)));
+      return value;
     });
   }
 

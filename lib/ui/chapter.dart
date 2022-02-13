@@ -33,7 +33,6 @@ class _ChapterState extends State<Chapter> {
           color: Colors.transparent,
           shadowColor: Colors.transparent,
           child: IconButton(
-            color: Colors.transparent,
             focusColor: Colors.transparent,
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
