@@ -34,45 +34,36 @@ class _LoginState extends State<Login> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Container(
-              padding: const EdgeInsets.all(30),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/logo.png",
-                    width: 100,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 1.0),
-                    child: SizedBox(
-                      width: 250,
-                      child: TextFormField(
-                        controller: usrnm,
-                        decoration: InputDecoration(
-                          labelText: "Username",
-                          labelStyle: Theme.of(context).textTheme.bodyText1,
-                          filled: true,
+            child: Column(
+              children: [
+                Row(),
+                SizedBox(
+                  width: 280,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Image.asset(
+                        "assets/images/logo.png",
+                        width: 100,
+                        height: 100,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        child: TextFormField(
+                          controller: usrnm,
+                          decoration: InputDecoration(
+                            labelText: "Username",
+                            labelStyle: Theme.of(context).textTheme.bodyText1,
+                            filled: true,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 1.0),
-                    child: SizedBox(
-                      width: 250,
-                      child: TextFormField(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
                         controller: pswd,
                         obscureText: !show,
                         cursorColor: Colors.white,
@@ -95,99 +86,94 @@ class _LoginState extends State<Login> {
                           labelText: 'Password',
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: SizedBox(
-                      width: 165,
-                      child: ListTile(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: ListTile(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          leading: const Icon(Icons.login),
+                          onTap: () async {
+                            if (usrnm.text.isNotEmpty && pswd.text.isNotEmpty) {
+                              var a;
+                              try {
+                                a = await loginUser(usrnm.text, pswd.text);
+                              } catch (e) {
+                                if (e.toString() ==
+                                    "Exception: Error code : 400") {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Invalid Username/Password!",
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(e.toString()),
+                                    ),
+                                  );
+                                }
+                                return;
+                              }
+                              sharedPreferences.setBool("incognitoMode", false);
+                              sharedPreferences.setString(
+                                  "session", a["session"]);
+                              sharedPreferences.setString(
+                                  "refresh", a["refresh"]);
+                              sharedPreferences.setString(
+                                  "username", usrnm.text);
+                              sharedPreferences.setBool("login", true);
+                              incognitoMode = false;
+                              login = true;
+                              get();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Loading(),
+                                ),
+                              );
+                            }
+                          },
+                          title: const Text(
+                            "LogIn",
                           ),
                         ),
-                        leading: const Icon(Icons.login),
-                        onTap: () async {
-                          if (usrnm.text.isNotEmpty && pswd.text.isNotEmpty) {
-                            var a;
-                            try {
-                              a = await loginUser(usrnm.text, pswd.text);
-                            } catch (e) {
-                              if (e.toString() ==
-                                  "Exception: Error code : 400") {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "Invalid Username/Password!",
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(e.toString()),
-                                  ),
-                                );
-                              }
-                              return;
-                            }
-                            sharedPreferences.setBool("incognitoMode", false);
-                            sharedPreferences.setString(
-                                "session", a["session"]);
-                            sharedPreferences.setString(
-                                "refresh", a["refresh"]);
-                            sharedPreferences.setString("username", usrnm.text);
-                            sharedPreferences.setBool("login", true);
-                            incognitoMode = false;
-                            login = true;
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: ListTile(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          leading: const Icon(Icons.person_off_rounded),
+                          onTap: () {
+                            sharedPreferences.clear();
+                            set();
                             get();
+                            sharedPreferences.setBool("incognitoMode", true);
+                            incognitoMode = true;
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Loading(),
+                                builder: (context) => const Loading(),
                               ),
                             );
-                          }
-                        },
-                        title: const Text(
-                          "LogIn",
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: SizedBox(
-                      width: 155,
-                      child: ListTile(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
+                          },
+                          title: const Text(
+                            "Incognito",
                           ),
                         ),
-                        leading: const Icon(Icons.person_off_rounded),
-                        onTap: () {
-                          sharedPreferences.clear();
-                          set();
-                          get();
-                          sharedPreferences.setBool("incognitoMode", true);
-                          incognitoMode = true;
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Loading(),
-                            ),
-                          );
-                        },
-                        title: const Text(
-                          "Incognito",
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -15,6 +15,9 @@ ThemeData light = ThemeData(
   secondaryHeaderColor: Colors.black,
   backgroundColor: Colors.black,
   dialogBackgroundColor: Colors.white,
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: Colors.black,
+  ),
   indicatorColor: Colors.black54,
   cursorColor: Colors.black,
   radioTheme: RadioThemeData(
@@ -153,5 +156,8 @@ ThemeData dark = ThemeData(
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.white70,
     backgroundColor: Colors.black54,
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: Colors.white,
   ),
 );

@@ -56,7 +56,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
     );
     _navBarWidth = Tween<double>(begin: 75, end: 200).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
@@ -136,156 +136,176 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                 )))
           : (null),
-      body: Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          (deviceMode == Orientation.landscape)
-              ? MouseRegion(
-                  onEnter: (event) {
-                    _animationController.forward().whenComplete(
-                          () => setState(() {
-                            isHovered = true;
-                          }),
-                        );
-                  },
-                  onExit: (event) {
-                    setState(() {
-                      isHovered = false;
-                    });
-                    _animationController.reverse();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return SizedBox(
-                              width: _navBarWidth.value,
-                              child: (SingleChildScrollView(
-                                primary: false,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () {
-                                        setState(() {
-                                          currentIndex = 2;
-                                        });
-                                      },
-                                      child: Center(
-                                        child: SizedBox(
-                                          height: 75,
-                                          width: 75,
-                                          child: Image.asset(
-                                              "assets/images/logo.png"),
+      floatingActionButton: (currentIndex == 0)
+          ? (FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(CupertinoIcons.gift_fill),
+            ))
+          : (null),
+      body: Padding(
+        padding: (deviceMode == Orientation.landscape)
+            ? (const EdgeInsets.only(top: kTextTabBarHeight - 10))
+            : (EdgeInsets.zero),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            (deviceMode == Orientation.landscape)
+                ? MouseRegion(
+                    onEnter: (event) {
+                      _animationController.forward().whenComplete(
+                            () => setState(() {
+                              isHovered = true;
+                            }),
+                          );
+                    },
+                    onExit: (event) {
+                      setState(() {
+                        isHovered = false;
+                      });
+                      _animationController.reverse();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        child: AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              return SizedBox(
+                                width: _navBarWidth.value,
+                                child: (SingleChildScrollView(
+                                  primary: false,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () {
+                                          setState(() {
+                                            currentIndex = 2;
+                                          });
+                                        },
+                                        child: Center(
+                                          child: SizedBox(
+                                            height: 75,
+                                            width: 75,
+                                            child: Image.asset(
+                                                "assets/images/logo.png"),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    ListTile(
-                                      title: isHovered ? Text("Search") : null,
-                                      onTap: () {
-                                        if (currentIndex != 1) {
-                                          setState(() {
-                                            currentIndex = 1;
-                                          });
-                                        }
-                                      },
-                                      leading: const Icon(
-                                        CupertinoIcons.search,
+                                      const SizedBox(
+                                        height: 30,
                                       ),
-                                    ),
-                                    ListTile(
-                                      title: isHovered ? Text("Explore") : null,
-                                      onTap: () {
-                                        if (currentIndex != 0) {
-                                          setState(() {
-                                            currentIndex = 0;
-                                          });
-                                        }
-                                      },
-                                      leading: const Icon(
-                                        CupertinoIcons.compass,
+                                      ListTile(
+                                        title: isHovered
+                                            ? const Text("Search")
+                                            : null,
+                                        onTap: () {
+                                          if (currentIndex != 1) {
+                                            setState(() {
+                                              currentIndex = 1;
+                                            });
+                                          }
+                                        },
+                                        leading: const Icon(
+                                          CupertinoIcons.search,
+                                        ),
                                       ),
-                                    ),
-                                    ListTile(
-                                      title:
-                                          isHovered ? Text("Bookmarks") : null,
-                                      onTap: () {
-                                        if (currentIndex != 3) {
-                                          setState(() {
-                                            currentIndex = 3;
-                                          });
-                                        }
-                                      },
-                                      leading: const Icon(
-                                        CupertinoIcons.bookmark,
+                                      ListTile(
+                                        title: isHovered
+                                            ? const Text("Explore")
+                                            : null,
+                                        onTap: () {
+                                          if (currentIndex != 0) {
+                                            setState(() {
+                                              currentIndex = 0;
+                                            });
+                                          }
+                                        },
+                                        leading: const Icon(
+                                          CupertinoIcons.compass,
+                                        ),
                                       ),
-                                    ),
-                                    ListTile(
-                                      title:
-                                          isHovered ? Text("Settings") : null,
-                                      onTap: () {
-                                        if (currentIndex != 4) {
-                                          setState(() {
-                                            currentIndex = 4;
-                                          });
-                                        }
-                                      },
-                                      leading: const Icon(
-                                        CupertinoIcons.settings,
+                                      ListTile(
+                                        title: isHovered
+                                            ? const Text("Bookmarks")
+                                            : null,
+                                        onTap: () {
+                                          if (currentIndex != 3) {
+                                            setState(() {
+                                              currentIndex = 3;
+                                            });
+                                          }
+                                        },
+                                        leading: const Icon(
+                                          CupertinoIcons.bookmark,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                            );
-                          }),
+                                      ListTile(
+                                        title: isHovered
+                                            ? const Text("Settings")
+                                            : null,
+                                        onTap: () {
+                                          if (currentIndex != 4) {
+                                            setState(() {
+                                              currentIndex = 4;
+                                            });
+                                          }
+                                        },
+                                        leading: const Icon(
+                                          CupertinoIcons.settings,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                              );
+                            }),
+                      ),
                     ),
-                  ),
-                )
-              : (const SizedBox(
-                  width: 0,
-                  height: 0,
-                )),
-          Expanded(
-            child: Column(
-              children: [
-                (currentIndex == 1 && deviceMode == Orientation.landscape)
-                    ? (searchInput)
-                    : (const SizedBox()),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(
-                        (deviceMode == Orientation.landscape) ? 10 : 0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(
-                          (deviceMode == Orientation.landscape) ? 10 : 0)),
-                      child: Container(
-                        color: (Theme.of(context).brightness == Brightness.dark)
-                            ? (Colors.black26)
-                            : (Colors.white),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: homepage.elementAt(currentIndex),
+                  )
+                : (const SizedBox(
+                    width: 0,
+                    height: 0,
+                  )),
+            Expanded(
+              child: Column(
+                children: [
+                  (currentIndex == 1 && deviceMode == Orientation.landscape)
+                      ? (searchInput)
+                      : (const SizedBox()),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(
+                          (deviceMode == Orientation.landscape) ? 10 : 0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            (deviceMode == Orientation.landscape) ? 10 : 0)),
+                        child: Container(
+                          color:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? (Colors.black26)
+                                  : (Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: homepage.elementAt(currentIndex),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: (deviceMode == Orientation.portrait)
           ? SizedBox(

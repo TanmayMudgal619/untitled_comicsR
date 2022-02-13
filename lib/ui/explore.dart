@@ -122,7 +122,7 @@ class GV extends StatelessWidget {
               105,
           childAspectRatio: 105 / 160,
           mainAxisSpacing: 10,
-          crossAxisSpacing: 5,
+          crossAxisSpacing: 10,
         ),
         itemCount: mangaGV.length,
         itemBuilder: (context, val) {

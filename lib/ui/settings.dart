@@ -16,7 +16,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [

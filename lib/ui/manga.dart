@@ -103,12 +103,12 @@ class _MangaPageState extends State<MangaPage> {
                 } else {
                   return Material(
                     color: Colors.transparent,
-                    child: IconButton(
+                    child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      onPressed: () {
+                      onTap: () {
                         showCupertinoModalPopup(
                             context: context,
                             builder: (context) {
@@ -219,7 +219,7 @@ class _MangaPageState extends State<MangaPage> {
                               );
                             });
                       },
-                      icon: const Icon(Icons.star_border_rounded),
+                      child: const Icon(Icons.star_border_rounded),
                     ),
                   );
                 }
@@ -821,7 +821,7 @@ class _MangaBasedState extends State<MangaBased> {
                       105,
                   childAspectRatio: 105 / 160,
                   mainAxisSpacing: 10,
-                  crossAxisSpacing: 5,
+                  crossAxisSpacing: 10,
                 ),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, val) {
