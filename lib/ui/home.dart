@@ -12,15 +12,20 @@ import 'explore.dart';
 import 'search.dart';
 
 class Home extends StatefulWidget {
-  Home();
+  const Home({Key? key}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 2;
+  bool isHovered = false; //is set to true if
   late CupertinoNavigationBar searchInput;
   late MangaAggregate ma;
+
+  late AnimationController _animationController; //animation related
+  late Animation<double> _navBarWidth; //controls navbar expand animation
+
   List<Widget> homepage = [
     SizedBox(
       child: ExploreManga(),
@@ -49,6 +54,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
+    _navBarWidth = Tween<double>(begin: 75, end: 200).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
     searchInput = CupertinoNavigationBar(
       leading: Material(
         color: Colors.transparent,
@@ -129,85 +141,115 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           (deviceMode == Orientation.landscape)
-              ? Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    child: SizedBox(
-                      width: 75,
-                      child: (SingleChildScrollView(
-                        primary: false,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () {
-                                setState(() {
-                                  currentIndex = 2;
-                                });
-                              },
-                              child: Center(
-                                child: Image.asset("assets/images/logo.png"),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (currentIndex != 1) {
-                                  setState(() {
-                                    currentIndex = 1;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                CupertinoIcons.search,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (currentIndex != 0) {
-                                  setState(() {
-                                    currentIndex = 0;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                CupertinoIcons.compass,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (currentIndex != 3) {
-                                  setState(() {
-                                    currentIndex = 3;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                CupertinoIcons.bookmark,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (currentIndex != 4) {
-                                  setState(() {
-                                    currentIndex = 4;
-                                  });
-                                }
-                              },
-                              icon: const Icon(
-                                CupertinoIcons.settings,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
+              ? MouseRegion(
+                  onEnter: (event) {
+                    _animationController.forward().whenComplete(
+                          () => setState(() {
+                            isHovered = true;
+                          }),
+                        );
+                  },
+                  onExit: (event) {
+                    setState(() {
+                      isHovered = false;
+                    });
+                    _animationController.reverse();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) {
+                            return SizedBox(
+                              width: _navBarWidth.value,
+                              child: (SingleChildScrollView(
+                                primary: false,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () {
+                                        setState(() {
+                                          currentIndex = 2;
+                                        });
+                                      },
+                                      child: Center(
+                                        child: SizedBox(
+                                          height: 75,
+                                          width: 75,
+                                          child: Image.asset(
+                                              "assets/images/logo.png"),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    ListTile(
+                                      title: isHovered ? Text("Search") : null,
+                                      onTap: () {
+                                        if (currentIndex != 1) {
+                                          setState(() {
+                                            currentIndex = 1;
+                                          });
+                                        }
+                                      },
+                                      leading: const Icon(
+                                        CupertinoIcons.search,
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title: isHovered ? Text("Explore") : null,
+                                      onTap: () {
+                                        if (currentIndex != 0) {
+                                          setState(() {
+                                            currentIndex = 0;
+                                          });
+                                        }
+                                      },
+                                      leading: const Icon(
+                                        CupertinoIcons.compass,
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title:
+                                          isHovered ? Text("Bookmarks") : null,
+                                      onTap: () {
+                                        if (currentIndex != 3) {
+                                          setState(() {
+                                            currentIndex = 3;
+                                          });
+                                        }
+                                      },
+                                      leading: const Icon(
+                                        CupertinoIcons.bookmark,
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title:
+                                          isHovered ? Text("Settings") : null,
+                                      onTap: () {
+                                        if (currentIndex != 4) {
+                                          setState(() {
+                                            currentIndex = 4;
+                                          });
+                                        }
+                                      },
+                                      leading: const Icon(
+                                        CupertinoIcons.settings,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                            );
+                          }),
                     ),
                   ),
                 )
