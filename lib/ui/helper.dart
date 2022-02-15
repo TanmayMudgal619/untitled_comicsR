@@ -49,7 +49,6 @@ class MangaRow extends StatelessWidget {
           ),
         ),
         Container(
-          height: 164,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -140,19 +139,45 @@ class _SlideShowState extends State<SlideShow> {
                                     e.title,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 20,
+                                      fontSize: 24,
                                     ),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      e.descm,
-                                      overflow: TextOverflow.fade,
+                                  // const SizedBox(
+                                  //   height: 5,
+                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Expanded(
+                                      child: Text(
+                                        e.descm,
+                                        maxLines: 4,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: e.genre
+                                        .map((e) => Card(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(100),
+                                                ),
+                                              ),
+                                              color: Colors.white12,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 7, 10, 7),
+                                                child: Text(
+                                                  e,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
                                   )
                                 ],
                               ),
