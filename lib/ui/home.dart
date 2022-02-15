@@ -39,9 +39,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             SlideShow(mangaList: slideshowManga),
-            const Padding(padding: EdgeInsets.all(20)),
             MangaRow(title: "Latest Added Mangas", mangaList: latestManga),
-            const Padding(padding: EdgeInsets.all(20)),
             MangaRow(title: "Recently Updated Mangas", mangaList: updatedManga),
             const Padding(
                 padding: EdgeInsets.all(kBottomNavigationBarHeight / 2)),

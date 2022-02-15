@@ -3,9 +3,24 @@ import 'package:untitledcomics/api/classes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'manga.dart';
 
-class MangaTile extends StatelessWidget {
+class MangaTile extends StatefulWidget {
   Manga manga;
   MangaTile({Key? key, required this.manga}) : super(key: key);
+
+  @override
+  State<MangaTile> createState() => _MangaTileState();
+}
+
+class _MangaTileState extends State<MangaTile>
+    with SingleTickerProviderStateMixin {
+  bool mouseEntered = false;
+  late AnimationController _animationController;
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +46,23 @@ class MangaTile extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MangaPage(mangaOpened: manga)));
+                    builder: (context) =>
+                        MangaPage(mangaOpened: widget.manga)));
           },
           child: Container(
-            width: 105,
-            height: 160,
+            // width: 105,
+            // height: 160,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  manga.cover,
+                  widget.manga.cover,
                 ),
                 fit: BoxFit.cover,
               ),
             ),
             child: Container(
-              width: 105,
-              height: 160,
+              width: 150,
+              height: 200,
               padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -72,23 +88,61 @@ class MangaTile extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           color: Colors.black45,
-                          child: Icon(
-                            Icons.circle,
-                            size: 10,
-                            color: (manga.status == "ongoing")
-                                ? (Colors.blueAccent)
-                                : ((manga.status == "completed")
-                                    ? (Colors.green)
-                                    : ((manga.status == "hiatus")
-                                        ? (Colors.orange)
-                                        : (Colors.red))),
+                          child: MouseRegion(
+                            onEnter: (event) {
+                              setState(() {
+                                mouseEntered = true;
+                              });
+                            },
+                            onExit: (event) {
+                              setState(() {
+                                mouseEntered = false;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              height: 20,
+                              width: mouseEntered ? 75 : 20,
+                              duration: Duration(milliseconds: 100),
+                              child: mouseEntered
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            (widget.manga.status == "ongoing")
+                                                ? (Colors.blueAccent)
+                                                : ((widget.manga.status ==
+                                                        "completed")
+                                                    ? (Colors.green)
+                                                    : ((widget.manga.status ==
+                                                            "hiatus")
+                                                        ? (Colors.orange)
+                                                        : (Colors.red))),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                          child:
+                                              Text("${widget.manga.status}")),
+                                    )
+                                  : Icon(
+                                      Icons.circle,
+                                      size: 20,
+                                      color: (widget.manga.status == "ongoing")
+                                          ? (Colors.blueAccent)
+                                          : ((widget.manga.status ==
+                                                  "completed")
+                                              ? (Colors.green)
+                                              : ((widget.manga.status ==
+                                                      "hiatus")
+                                                  ? (Colors.orange)
+                                                  : (Colors.red))),
+                                    ),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                   Text(
-                    manga.title,
+                    widget.manga.title,
                     style: const TextStyle(color: Colors.white),
                     overflow: TextOverflow.fade,
                     maxLines: 3,
