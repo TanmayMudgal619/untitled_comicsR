@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/globals/globals.dart';

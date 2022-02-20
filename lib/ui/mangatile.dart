@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/ui/mangaoverview.dart';
 import 'manga.dart';
 
 class MangaTile extends StatefulWidget {
-  Manga manga;
-  MangaTile({Key? key, required this.manga}) : super(key: key);
+  final Manga manga;
+  const MangaTile({Key? key, required this.manga}) : super(key: key);
 
   @override
   State<MangaTile> createState() => _MangaTileState();
@@ -17,8 +19,8 @@ class _MangaTileState extends State<MangaTile>
   late AnimationController _animationController;
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 250));
     super.initState();
   }
 
@@ -49,6 +51,11 @@ class _MangaTileState extends State<MangaTile>
                     builder: (context) =>
                         MangaPage(mangaOpened: widget.manga)));
           },
+          onDoubleTap: () {
+            (deviceMode == Orientation.landscape)
+                ? (showmangaoverview(context, widget.manga))
+                : (showmangaoverview(context, widget.manga));
+          },
           child: Container(
             // width: 105,
             // height: 160,
@@ -63,7 +70,7 @@ class _MangaTileState extends State<MangaTile>
             child: Container(
               width: 150,
               height: 200,
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -101,8 +108,8 @@ class _MangaTileState extends State<MangaTile>
                             },
                             child: AnimatedContainer(
                               height: 20,
-                              width: mouseEntered ? 75 : 20,
-                              duration: Duration(milliseconds: 100),
+                              width: mouseEntered ? 150 : 20,
+                              duration: const Duration(milliseconds: 200),
                               child: mouseEntered
                                   ? Container(
                                       decoration: BoxDecoration(
@@ -119,8 +126,10 @@ class _MangaTileState extends State<MangaTile>
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Center(
-                                          child:
-                                              Text("${widget.manga.status}")),
+                                        child: Text(
+                                          widget.manga.status,
+                                        ),
+                                      ),
                                     )
                                   : Icon(
                                       Icons.circle,

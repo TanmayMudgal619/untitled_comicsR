@@ -239,7 +239,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       ),
                                       ListTile(
                                         title: isHovered
-                                            ? const Text("Bookmarks")
+                                            ? const Text("Library")
                                             : null,
                                         onTap: () {
                                           if (currentIndex != 3) {

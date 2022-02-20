@@ -38,6 +38,8 @@ dependencies:
   bbob_dart: ^0.1.1
   path: ^1.7.0
   flutter_image: ^4.1.0
+  desktop_window: ^0.4.0
+
 
 
   # The following adds the Cupertino Icons font to your application.

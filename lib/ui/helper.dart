@@ -7,6 +7,7 @@ import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/login.dart';
 import 'package:untitledcomics/ui/manga.dart';
 import 'package:untitledcomics/ui/show.dart';
+import 'mangaoverview.dart';
 import 'mangatile.dart';
 
 class MangaRow extends StatelessWidget {
@@ -144,41 +145,14 @@ class _SlideShowState extends State<SlideShow> {
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  // const SizedBox(
-                                  //   height: 5,
-                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
-                                    child: Expanded(
-                                      child: Text(
-                                        e.descm,
-                                        maxLines: 4,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                    child: Text(
+                                      e.descm,
+                                      maxLines: 4,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  const Spacer(),
-                                  Row(
-                                    children: e.genre
-                                        .map((e) => Card(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(100),
-                                                ),
-                                              ),
-                                              color: Colors.white12,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        10, 7, 10, 7),
-                                                child: Text(
-                                                  e,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                  )
                                 ],
                               ),
                             ),
