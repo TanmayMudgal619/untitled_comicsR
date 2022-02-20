@@ -1,5 +1,5 @@
 name: untitledcomics
-description: A new Flutter project.
+description: A Flutter Responsive App for MangaDex Users.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,7 +38,7 @@ dependencies:
   bbob_dart: ^0.1.1
   path: ^1.7.0
   flutter_image: ^4.1.0
-  desktop_window: ^0.4.0
+  # desktop_window: ^0.4.0
 
 
 

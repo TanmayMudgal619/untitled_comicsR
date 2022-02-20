@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/loading.dart';
 import 'package:untitledcomics/ui/login.dart';
-import 'package:desktop_window/desktop_window.dart';
+// import 'package:desktop_window/desktop_window.dart';
 import 'package:untitledcomics/ui/theme.dart';
 import 'set.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setMinWindowSize(const Size(1200, 800));
+  // await DesktopWindow.setMinWindowSize(const Size(1200, 800));
   sharedPreferences = await SharedPreferences.getInstance();
   bool check = sharedPreferences.getBool("set") ?? false;
   if (!check) {
