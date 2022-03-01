@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
@@ -40,7 +41,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
           });
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) => const Home(),
             ),
           );
@@ -48,7 +49,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) => Home(),
           ),
         );

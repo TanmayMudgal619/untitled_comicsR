@@ -96,7 +96,7 @@ class _SettingsState extends State<Settings> {
               get();
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const Login()),
+                  CupertinoPageRoute(builder: (context) => const Login()),
                   (route) => false);
             },
             title: const Text("LogOut!"),

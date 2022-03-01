@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
 import 'package:untitledcomics/ui/helper.dart';
+import 'package:untitledcomics/ui/manga.dart';
 
 void showmangaoverview(BuildContext context, Manga manga) {
   showCupertinoModalPopup(
@@ -43,10 +44,22 @@ void showmangaoverview(BuildContext context, Manga manga) {
                             ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
-                              child: CachedNetworkImage(
-                                imageUrl: manga.cover,
-                                fit: BoxFit.cover,
-                                width: 130,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) => MangaPage(
+                                        mangaOpened: manga,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: manga.cover,
+                                  fit: BoxFit.cover,
+                                  width: 130,
+                                ),
                               ),
                             ),
                             Expanded(

@@ -68,7 +68,7 @@ class _ExploreMangaState extends State<ExploreManga> {
                                         onPressed: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(
+                                            CupertinoPageRoute(
                                               builder: (context) => ShowManga(
                                                 title: genres[e.key]!,
                                                 mangas: e.value.toList(),

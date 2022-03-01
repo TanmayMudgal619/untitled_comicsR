@@ -59,7 +59,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                             onTap: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                       builder: (context) => Chapter(
                                             chapter: e,
                                           )));

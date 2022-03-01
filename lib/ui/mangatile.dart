@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -47,7 +48,7 @@ class _MangaTileState extends State<MangaTile>
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) =>
                         MangaPage(mangaOpened: widget.manga)));
           },

@@ -38,7 +38,7 @@ class MangaRow extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).push(CupertinoPageRoute(
                       builder: (context) =>
                           ShowManga(title: title, mangas: mangaList)));
                 },
@@ -90,7 +90,7 @@ class _SlideShowState extends State<SlideShow> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                               builder: (context) => MangaPage(mangaOpened: e)));
                     },
                     child: Container(
@@ -145,12 +145,13 @@ class _SlideShowState extends State<SlideShow> {
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      e.descm,
-                                      maxLines: 4,
-                                      overflow: TextOverflow.ellipsis,
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        e.descm,
+                                        overflow: TextOverflow.fade,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -241,7 +242,7 @@ class LoginButton extends StatelessWidget {
       child: (TextButton(
         onPressed: () {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const Login()));
+              context, CupertinoPageRoute(builder: (context) => const Login()));
         },
         child: Text(
           "Login First!",

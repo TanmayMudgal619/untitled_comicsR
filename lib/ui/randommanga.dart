@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/globals/globals.dart';
@@ -29,7 +30,7 @@ class _RandomMangaState extends State<RandomManga>
     randommanga().then((value) {
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
               builder: (context) => MangaPage(mangaOpened: value)));
       return value;
     });

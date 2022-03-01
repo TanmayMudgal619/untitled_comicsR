@@ -132,7 +132,7 @@ class _LoginState extends State<Login> {
                               get();
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => Loading(),
                                 ),
                               );
@@ -160,7 +160,7 @@ class _LoginState extends State<Login> {
                             incognitoMode = true;
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                 builder: (context) => const Loading(),
                               ),
                             );

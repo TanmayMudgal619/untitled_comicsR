@@ -27,8 +27,6 @@ class _MangaPageState extends State<MangaPage> {
   late MangaStatistics mangaStatistics;
   late Future<MangaAggregate> mangaAggregate;
   String mangaReadingStatus = "none";
-  int currentIndexL = 0;
-  int currentIndexP = 0;
   double rating = 0.0;
   @override
   void initState() {
@@ -263,8 +261,6 @@ class _MangaPageState extends State<MangaPage> {
                       mangaInfo: mangaInfo,
                       mangaChapters: mangaPageChapter,
                       mangaBased: mangaBased,
-                      currentIndexL: currentIndexL,
-                      currentIndexP: currentIndexP,
                     ),
                   ),
                 ))
@@ -292,8 +288,6 @@ class _MangaPageState extends State<MangaPage> {
                   mangaInfo: mangaInfo,
                   mangaChapters: mangaPageChapter,
                   mangaBased: mangaBased,
-                  currentIndexL: currentIndexL,
-                  currentIndexP: currentIndexP,
                 ),
               ),
             ),
@@ -358,7 +352,7 @@ class _MangaHeaderState extends State<MangaHeader> {
                               right: 5,
                               top: 5,
                               child: Container(
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(5),
                                 decoration: const BoxDecoration(
                                     color: Colors.black87,
                                     borderRadius:
@@ -599,17 +593,13 @@ class MangaBody extends StatefulWidget {
   MangaInfo mangaInfo;
   Widget mangaChapters;
   MangaBased mangaBased;
-  int currentIndexL;
-  int currentIndexP;
-  MangaBody(
-      {Key? key,
-      required this.tabs,
-      required this.mangaInfo,
-      required this.mangaChapters,
-      required this.mangaBased,
-      required this.currentIndexL,
-      required this.currentIndexP})
-      : super(key: key);
+  MangaBody({
+    Key? key,
+    required this.tabs,
+    required this.mangaInfo,
+    required this.mangaChapters,
+    required this.mangaBased,
+  }) : super(key: key);
 
   @override
   _MangaBodyState createState() => _MangaBodyState();
@@ -621,7 +611,7 @@ class _MangaBodyState extends State<MangaBody> {
   Widget build(BuildContext context) {
     List<Widget> TabData = [];
     if (deviceMode == Orientation.portrait) {
-      TabData.add(Container(
+      TabData.add(SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(child: widget.mangaInfo),
@@ -629,22 +619,20 @@ class _MangaBodyState extends State<MangaBody> {
       ));
     }
     TabData.addAll([
-      Container(
+      SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: widget.mangaChapters,
         ),
       ),
-      Container(
+      SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: widget.mangaBased,
         ),
       )
     ]);
-    currentIndex = (deviceMode == Orientation.landscape)
-        ? (widget.currentIndexL)
-        : (widget.currentIndexP);
+    currentIndex = 0;
     return DefaultTabController(
       initialIndex: currentIndex,
       length: widget.tabs.length,
@@ -669,17 +657,9 @@ class _MangaBodyState extends State<MangaBody> {
                   children: [
                     TabBar(
                       onTap: (value) {
-                        if (deviceMode == Orientation.landscape) {
-                          widget.currentIndexL = value;
-                          widget.currentIndexP = (value == 0) ? 1 : 2;
-                        } else {
-                          widget.currentIndexP = value;
-                          if (value != 0) {
-                            widget.currentIndexL = (value == 1) ? 0 : 1;
-                          } else {
-                            widget.currentIndexL = 0;
-                          }
-                        }
+                        setState(() {
+                          currentIndex = value;
+                        });
                       },
                       tabs: widget.tabs
                           .map((e) => Tab(
@@ -783,8 +763,8 @@ class MangaInfo extends StatelessWidget {
 }
 
 class MangaBased extends StatefulWidget {
-  Future<List<Manga>> basedManga;
-  MangaBased({Key? key, required this.basedManga}) : super(key: key);
+  final Future<List<Manga>> basedManga;
+  const MangaBased({Key? key, required this.basedManga}) : super(key: key);
 
   @override
   State<MangaBased> createState() => _MangaBasedState();
@@ -816,7 +796,7 @@ class _MangaBasedState extends State<MangaBased> {
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: ((deviceMode == Orientation.landscape)
-                          ? (size.width - size.width * 0.46)
+                          ? (size.width - size.width * 0.5)
                           : (size.width)) ~/
                       105,
                   childAspectRatio: 105 / 160,
