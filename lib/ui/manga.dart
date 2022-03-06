@@ -9,6 +9,8 @@ import 'helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'mangachapter.dart';
 
+// late Orientation deviceMode;
+
 class MangaPage extends StatefulWidget {
   final Manga mangaOpened;
   const MangaPage({Key? key, required this.mangaOpened}) : super(key: key);
@@ -69,7 +71,7 @@ class _MangaPageState extends State<MangaPage> {
 
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CupertinoNavigationBar(
@@ -226,7 +228,7 @@ class _MangaPageState extends State<MangaPage> {
         ),
         backgroundColor: Colors.transparent,
       ),
-      body: (deviceMode == Orientation.landscape)
+      body: (size.width > 500)
           ? Row(
               children: [
                 (Padding(
@@ -610,7 +612,7 @@ class _MangaBodyState extends State<MangaBody> {
   @override
   Widget build(BuildContext context) {
     List<Widget> TabData = [];
-    if (deviceMode == Orientation.portrait) {
+    if (size.width <= 500) {
       TabData.add(SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -645,11 +647,9 @@ class _MangaBodyState extends State<MangaBody> {
             Flexible(
               child: Container(
                 // width: size.width * 0.9,
-                height: (deviceMode == Orientation.landscape)
-                    ? (size.height)
-                    : (null),
+                height: (size.width > 500) ? (size.height) : (null),
                 decoration: BoxDecoration(
-                  borderRadius: (deviceMode == Orientation.landscape)
+                  borderRadius: (size.width > 500)
                       ? (const BorderRadius.all(Radius.circular(10)))
                       : (null),
                 ),
@@ -795,7 +795,7 @@ class _MangaBasedState extends State<MangaBased> {
                 primary: false,
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: ((deviceMode == Orientation.landscape)
+                  crossAxisCount: ((size.width > 500)
                           ? (size.width - size.width * 0.5)
                           : (size.width)) ~/
                       105,

@@ -10,24 +10,19 @@ void showmangaoverview(BuildContext context, Manga manga) {
   showCupertinoModalPopup(
       context: context,
       builder: (context) {
-        deviceMode = MediaQuery.of(context).orientation;
+        // deviceMode = MediaQuery.of(context).orientation;
         return Padding(
-          padding: EdgeInsets.all(
-              ((deviceMode == Orientation.landscape) ? (10.0) : (0.0))),
+          padding: EdgeInsets.all(((size.width > 500) ? (10.0) : (0.0))),
           child: Align(
-            alignment: ((deviceMode == Orientation.landscape)
+            alignment: ((size.width > 500)
                 ? (Alignment.center)
                 : (Alignment.bottomCenter)),
             child: Material(
               color: Colors.transparent,
               child: Container(
                 padding: const EdgeInsets.all(10),
-                width: (deviceMode == Orientation.landscape)
-                    ? (500)
-                    : (size.width),
-                height: (deviceMode == Orientation.landscape)
-                    ? (500)
-                    : (size.height * 0.68),
+                width: (size.width > 500) ? (500) : (size.width),
+                height: (size.width > 500) ? (500) : (size.height * 0.68),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColorDark,
                   borderRadius: const BorderRadius.all(

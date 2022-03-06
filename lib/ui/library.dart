@@ -94,7 +94,7 @@ class _LibraryState extends State<Library> {
 
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return SizedBox(
       child: DefaultTabController(
@@ -130,7 +130,7 @@ class _LibraryState extends State<Library> {
                         shrinkWrap: true,
                         controller: e["scroll"],
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ((deviceMode == Orientation.landscape)
+                          crossAxisCount: ((size.width > 500)
                                   ? (size.width - size.width * 0.3)
                                   : (size.width)) ~/
                               105,

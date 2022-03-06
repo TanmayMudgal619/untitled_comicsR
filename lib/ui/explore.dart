@@ -20,7 +20,7 @@ class ExploreManga extends StatefulWidget {
 class _ExploreMangaState extends State<ExploreManga> {
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return FutureBuilder<Map<String, Set<Manga>>>(
       future: widget.exploreManga,
@@ -115,7 +115,7 @@ class GV extends StatelessWidget {
         primary: false,
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: ((deviceMode == Orientation.landscape)
+          crossAxisCount: ((size.width > 500)
                   ? (size.width - size.width * 0.3)
                   : (size.width)) ~/
               105,

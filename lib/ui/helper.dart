@@ -49,7 +49,7 @@ class MangaRow extends StatelessWidget {
             ],
           ),
         ),
-        Container(
+        SizedBox(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -112,7 +112,7 @@ class _SlideShowState extends State<SlideShow> {
                           Radius.circular(15),
                         ),
                       ),
-                      width: (deviceMode == Orientation.landscape)
+                      width: (size.width > 500)
                           ? (size.width * 0.6)
                           : (size.width * 0.9),
                       height: 200,

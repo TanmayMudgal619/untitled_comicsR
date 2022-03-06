@@ -53,7 +53,7 @@ class _MangaTileState extends State<MangaTile>
                         MangaPage(mangaOpened: widget.manga)));
           },
           onDoubleTap: () {
-            (deviceMode == Orientation.landscape)
+            (size.width > 500)
                 ? (showmangaoverview(context, widget.manga))
                 : (showmangaoverview(context, widget.manga));
           },
@@ -69,7 +69,7 @@ class _MangaTileState extends State<MangaTile>
               ),
             ),
             child: Container(
-              width: 150,
+              width: 160,
               height: 200,
               padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
               decoration: const BoxDecoration(

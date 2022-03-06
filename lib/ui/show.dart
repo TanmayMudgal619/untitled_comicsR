@@ -17,7 +17,7 @@ class ShowManga extends StatefulWidget {
 class _ShowMangaState extends State<ShowManga> {
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CupertinoNavigationBar(
@@ -32,10 +32,7 @@ class _ShowMangaState extends State<ShowManga> {
             primary: false,
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: ((deviceMode == Orientation.landscape)
-                      ? (size.width - size.width * 0.42)
-                      : (size.width)) ~/
-                  105,
+              crossAxisCount: size.width ~/ 105,
               childAspectRatio: 105 / 160,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,

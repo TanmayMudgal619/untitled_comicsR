@@ -37,10 +37,10 @@ class _SearchMangaState extends State<SearchManga> {
                     return GridView.builder(
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ((deviceMode == Orientation.landscape)
+                          crossAxisCount: ((size.width > 500)
                                   ? (size.width - size.width * 0.3)
                                   : (size.width)) ~/
-                              110,
+                              105,
                           childAspectRatio: 105 / 160,
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 10,

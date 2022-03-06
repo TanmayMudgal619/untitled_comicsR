@@ -59,7 +59,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     return Scaffold(
       body: Center(
         child: AnimatedBuilder(

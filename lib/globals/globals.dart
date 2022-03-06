@@ -27,7 +27,7 @@ Map<String, List<String>> allComics = {
 };
 Map<String, Map<String, dynamic>> allStatus = {};
 
-late Orientation deviceMode;
+// late Orientation deviceMode;
 late Size size;
 
 TextEditingController searchedManga = TextEditingController();

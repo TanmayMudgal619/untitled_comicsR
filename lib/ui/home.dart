@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:untitledcomics/api/apifunctions.dart';
 import 'package:untitledcomics/api/classes.dart';
 import 'package:untitledcomics/globals/globals.dart';
+import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/ui/randommanga.dart';
 import 'package:untitledcomics/ui/search.dart';
 import 'settings.dart';
@@ -21,7 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 2;
   bool isHovered = false; //is set to true if
-  late CupertinoNavigationBar searchInput;
+  // late CupertinoNavigationBar searchInput;
   late MangaAggregate ma;
 
   late AnimationController _animationController; //animation related
@@ -60,59 +61,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _navBarWidth = Tween<double>(begin: 75, end: 200).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
-    searchInput = CupertinoNavigationBar(
-      leading: Material(
-        color: Colors.transparent,
-        child: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            CupertinoIcons.search,
-          ),
-        ),
-      ),
-      trailing: Material(
-        color: Colors.transparent,
-        child: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            CupertinoIcons.slider_horizontal_3,
-          ),
-        ),
-      ),
-      middle: Material(
-        color: Colors.transparent,
-        child: TextField(
-          decoration: const InputDecoration(
-            hintText: "Search",
-            border: InputBorder.none,
-          ),
-          controller: searchedManga,
-          onChanged: (value) {
-            if (searchedManga.text.isEmpty) {
-              if (isSearch) {
-                setState(() {
-                  mangaSearching.ignore();
-                  isSearch = false;
-                });
-              }
-            }
-          },
-          onSubmitted: (value) {
-            if (searchedManga.text.isNotEmpty) {
-              setState(() {
-                isSearch = true;
-                mangaSearching = searchmanga(searchedManga.text, '50', '0');
-              });
-            } else {
-              setState(() {
-                mangaSearching.ignore();
-                isSearch = false;
-              });
-            }
-          },
-        ),
-      ),
-    );
     super.initState();
   }
 
@@ -121,13 +69,126 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     homepage[1] = SizedBox(
       child: SearchManga(),
     );
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: true,
-      appBar: (deviceMode == Orientation.portrait)
+      appBar: (size.width <= 500)
           ? ((currentIndex == 1)
-              ? (searchInput)
+              ? (CupertinoNavigationBar(
+                  leading: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        CupertinoIcons.search,
+                      ),
+                    ),
+                  ),
+                  trailing: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) {
+                              // deviceMode = MediaQuery.of(context).orientation;
+                              return Padding(
+                                padding: EdgeInsets.all(
+                                    ((size.width > 500) ? (10.0) : (0.0))),
+                                child: Align(
+                                  alignment: ((size.width > 500)
+                                      ? (Alignment.center)
+                                      : (Alignment.bottomCenter)),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: (size.width > 500)
+                                          ? (500)
+                                          : (size.width),
+                                      height: (size.width > 500)
+                                          ? (500)
+                                          : (size.height * 0.68),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            ExpandWidget(
+                                              heading: "Theme",
+                                              child: Wrap(
+                                                children: theme.keys
+                                                    .map(
+                                                      (e) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Chip(
+                                                          label: Text(
+                                                            e,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              ),
+                                              expanded: true,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      icon: const Icon(
+                        CupertinoIcons.slider_horizontal_3,
+                      ),
+                    ),
+                  ),
+                  middle: Material(
+                    color: Colors.transparent,
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: "Search",
+                        border: InputBorder.none,
+                      ),
+                      controller: searchedManga,
+                      onChanged: (value) {
+                        if (searchedManga.text.isEmpty) {
+                          if (isSearch) {
+                            setState(() {
+                              mangaSearching.ignore();
+                              isSearch = false;
+                            });
+                          }
+                        }
+                      },
+                      onSubmitted: (value) {
+                        if (searchedManga.text.isNotEmpty) {
+                          setState(() {
+                            isSearch = true;
+                            mangaSearching =
+                                searchmanga(searchedManga.text, '50', '0');
+                          });
+                        } else {
+                          setState(() {
+                            mangaSearching.ignore();
+                            isSearch = false;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ))
               : (CupertinoNavigationBar(
                   middle: Image.asset(
                     "assets/images/logo.png",
@@ -147,14 +208,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ))
           : (null),
       body: Padding(
-        padding: (deviceMode == Orientation.landscape)
-            ? (const EdgeInsets.only(top: kTextTabBarHeight - 10))
+        padding: (size.width > 500)
+            ? (const EdgeInsets.only(top: kTextTabBarHeight - 15))
             : (EdgeInsets.zero),
         child: Row(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            (deviceMode == Orientation.landscape)
+            (size.width > 500)
                 ? MouseRegion(
                     onEnter: (event) {
                       _animationController.forward().whenComplete(
@@ -282,16 +344,169 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             Expanded(
               child: Column(
                 children: [
-                  (currentIndex == 1 && deviceMode == Orientation.landscape)
-                      ? (searchInput)
+                  (currentIndex == 1 && size.width > 500)
+                      ? (CupertinoNavigationBar(
+                          leading: Material(
+                            color: Colors.transparent,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                CupertinoIcons.search,
+                              ),
+                            ),
+                          ),
+                          trailing: Material(
+                            color: Colors.transparent,
+                            child: IconButton(
+                              onPressed: () {
+                                showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (context) {
+                                      // deviceMode =
+                                      //     MediaQuery.of(context).orientation;
+                                      return Padding(
+                                        padding: EdgeInsets.all(
+                                            ((size.width > 500)
+                                                ? (10.0)
+                                                : (0.0))),
+                                        child: Align(
+                                          alignment: ((size.width > 500)
+                                              ? (Alignment.center)
+                                              : (Alignment.bottomCenter)),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              width: (size.width > 500)
+                                                  ? (500)
+                                                  : (size.width),
+                                              height: (size.width > 500)
+                                                  ? (500)
+                                                  : (size.height * 0.68),
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .primaryColorDark,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    ExpandWidget(
+                                                      heading: "Format",
+                                                      child: Wrap(
+                                                        runSpacing: 5,
+                                                        spacing: 5,
+                                                        children: format.keys
+                                                            .map(
+                                                              (e) => Chip(
+                                                                label: Text(
+                                                                  e,
+                                                                ),
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      ),
+                                                      expanded: true,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    ExpandWidget(
+                                                      heading: "Theme",
+                                                      child: Wrap(
+                                                        runSpacing: 5,
+                                                        spacing: 5,
+                                                        children: theme.keys
+                                                            .map(
+                                                              (e) => Chip(
+                                                                label: Text(
+                                                                  e,
+                                                                ),
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      ),
+                                                      expanded: true,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    ExpandWidget(
+                                                      heading: "Genre",
+                                                      child: Wrap(
+                                                        runSpacing: 5,
+                                                        spacing: 5,
+                                                        children: genres.values
+                                                            .map(
+                                                              (e) => Chip(
+                                                                label: Text(
+                                                                  e,
+                                                                ),
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      ),
+                                                      expanded: true,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                              icon: const Icon(
+                                CupertinoIcons.slider_horizontal_3,
+                              ),
+                            ),
+                          ),
+                          middle: Material(
+                            color: Colors.transparent,
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                hintText: "Search",
+                                border: InputBorder.none,
+                              ),
+                              controller: searchedManga,
+                              onChanged: (value) {
+                                if (searchedManga.text.isEmpty) {
+                                  if (isSearch) {
+                                    setState(() {
+                                      mangaSearching.ignore();
+                                      isSearch = false;
+                                    });
+                                  }
+                                }
+                              },
+                              onSubmitted: (value) {
+                                if (searchedManga.text.isNotEmpty) {
+                                  setState(() {
+                                    isSearch = true;
+                                    mangaSearching = searchmanga(
+                                        searchedManga.text, '50', '0');
+                                  });
+                                } else {
+                                  setState(() {
+                                    mangaSearching.ignore();
+                                    isSearch = false;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ))
                       : (const SizedBox()),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.all(
-                          (deviceMode == Orientation.landscape) ? 10 : 0),
+                      padding: EdgeInsets.all((size.width > 500) ? 10 : 0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            (deviceMode == Orientation.landscape) ? 10 : 0)),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular((size.width > 500) ? 10 : 0)),
                         child: Container(
                           color:
                               (Theme.of(context).brightness == Brightness.dark)
@@ -311,7 +526,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      bottomNavigationBar: (deviceMode == Orientation.portrait)
+      bottomNavigationBar: (size.width <= 500)
           ? SizedBox(
               child: ClipRRect(
                 child: BackdropFilter(

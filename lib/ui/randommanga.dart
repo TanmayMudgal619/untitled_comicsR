@@ -38,7 +38,7 @@ class _RandomMangaState extends State<RandomManga>
 
   @override
   Widget build(BuildContext context) {
-    deviceMode = MediaQuery.of(context).orientation;
+    // deviceMode = MediaQuery.of(context).orientation;
     return Scaffold(
       body: Center(
         child: AnimatedBuilder(
