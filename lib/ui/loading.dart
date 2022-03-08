@@ -50,7 +50,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => const Home(),
           ),
         );
       }
