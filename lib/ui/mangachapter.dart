@@ -55,7 +55,28 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                               ),
                             ),
                           ),
-                          child: ListTile(
+                          // child: ListTile(
+                          //   onTap: () {
+                          //     Navigator.push(
+                          //         context,
+                          //         CupertinoPageRoute(
+                          //             builder: (context) => Chapter(
+                          //                   chapter: e,
+                          //                 )));
+                          //   },
+                          //   leading: Icon(
+                          //     Icons.book,
+                          //     size: 50,
+                          //   ),
+                          //   title: Text(
+                          //     e.title,
+                          //   ),
+                          //   isThreeLine: true,
+                          //   subtitle: Text(
+                          //     "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
+                          //   ),
+                          // ),
+                          child: InkWell(
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -64,12 +85,43 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                             chapter: e,
                                           )));
                             },
-                            title: Text(
-                              e.title,
-                            ),
-                            isThreeLine: true,
-                            subtitle: Text(
-                              "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.book,
+                                  size: 80,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e.title,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Scanlation Group: ${e.scg}',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Volume: ${e.volume}',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
+                                      'Chapter: ${e.chapter}',
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
