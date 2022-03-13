@@ -40,7 +40,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             SlideShow(mangaList: slideshowManga),
+            const SizedBox(height: 20),
             MangaRow(title: "Latest Added Mangas", mangaList: latestManga),
+            const SizedBox(height: 20),
             MangaRow(title: "Recently Updated Mangas", mangaList: updatedManga),
             const Padding(
                 padding: EdgeInsets.all(kBottomNavigationBarHeight / 2)),
@@ -76,81 +78,96 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       appBar: (size.width <= 500)
           ? ((currentIndex == 1)
               ? (CupertinoNavigationBar(
-                  leading: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        CupertinoIcons.search,
-                      ),
-                    ),
-                  ),
                   trailing: Material(
                     color: Colors.transparent,
                     child: IconButton(
                       onPressed: () {
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) {
-                              // deviceMode = MediaQuery.of(context).orientation;
-                              return Padding(
-                                padding: EdgeInsets.all(
-                                    ((size.width > 500) ? (10.0) : (0.0))),
-                                child: Align(
-                                  alignment: ((size.width > 500)
-                                      ? (Alignment.center)
-                                      : (Alignment.bottomCenter)),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: (size.width > 500)
-                                          ? (500)
-                                          : (size.width),
-                                      height: (size.width > 500)
-                                          ? (500)
-                                          : (size.height * 0.68),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            ExpandWidget(
-                                              heading: "Theme",
-                                              child: Wrap(
-                                                children: theme.keys
-                                                    .map(
-                                                      (e) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Chip(
-                                                          label: Text(
-                                                            e,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                    .toList(),
-                                              ),
-                                              expanded: true,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
+                        if (isSearch) {
+                          setState(() {
+                            searchedManga.clear();
+                            isSearch = false;
+                          });
+                        }
+                      },
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      icon: Icon(
+                        (isSearch)
+                            ? (CupertinoIcons.xmark)
+                            : (CupertinoIcons.search),
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  leading: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      onPressed: () {
+                        //   showCupertinoModalPopup(
+                        //       context: context,
+                        //       builder: (context) {
+                        //         // deviceMode = MediaQuery.of(context).orientation;
+                        //         return Padding(
+                        //           padding: EdgeInsets.all(
+                        //               ((size.width > 500) ? (10.0) : (0.0))),
+                        //           child: Align(
+                        //             alignment: ((size.width > 500)
+                        //                 ? (Alignment.center)
+                        //                 : (Alignment.bottomCenter)),
+                        //             child: Material(
+                        //               color: Colors.transparent,
+                        //               child: Container(
+                        //                 padding: const EdgeInsets.all(10),
+                        //                 width: (size.width > 500)
+                        //                     ? (500)
+                        //                     : (size.width),
+                        //                 height: (size.width > 500)
+                        //                     ? (500)
+                        //                     : (size.height * 0.68),
+                        //                 decoration: BoxDecoration(
+                        //                   color:
+                        //                       Theme.of(context).primaryColorDark,
+                        //                   borderRadius: const BorderRadius.all(
+                        //                     Radius.circular(10),
+                        //                   ),
+                        //                 ),
+                        //                 child: SingleChildScrollView(
+                        //                   child: Column(
+                        //                     children: [
+                        //                       ExpandWidget(
+                        //                         heading: "Theme",
+                        //                         child: Wrap(
+                        //                           spacing: 5,
+                        //                           children: theme.keys
+                        //                               .map(
+                        //                                 (e) => Chip(
+                        //                                   label: Text(
+                        //                                     e,
+                        //                                   ),
+                        //                                 ),
+                        //                               )
+                        //                               .toList(),
+                        //                         ),
+                        //                         expanded: true,
+                        //                       ),
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         );
+                        //       });
                       },
                       icon: const Icon(
                         CupertinoIcons.slider_horizontal_3,
+                        size: 24,
                       ),
                     ),
                   ),

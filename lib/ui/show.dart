@@ -32,10 +32,10 @@ class _ShowMangaState extends State<ShowManga> {
             primary: false,
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: size.width ~/ 105,
-              childAspectRatio: 105 / 160,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
+              crossAxisCount: size.width ~/ 160,
+              childAspectRatio: 160 / 200,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
             ),
             itemCount: widget.mangas.length,
             itemBuilder: (context, val) {
