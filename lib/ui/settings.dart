@@ -4,6 +4,7 @@ import 'package:untitledcomics/globals/globals.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:untitledcomics/globals/tags.dart';
 import 'package:untitledcomics/set.dart';
+import 'package:untitledcomics/ui/helper.dart';
 import 'package:untitledcomics/ui/login.dart';
 
 class Settings extends StatefulWidget {
@@ -26,7 +27,7 @@ class _SettingsState extends State<Settings> {
             child: Image.asset("assets/images/logo.png"),
           ),
           Text(
-            usr.username,
+            (login) ? (usr.username) : ("Incognito"),
           ),
           ListTile(
             title: const Text("Data Saver"),
@@ -94,12 +95,92 @@ class _SettingsState extends State<Settings> {
               sharedPreferences.clear();
               set();
               get();
+              searchedManga.clear();
               Navigator.pushAndRemoveUntil(
                   context,
                   CupertinoPageRoute(builder: (context) => const Login()),
                   (route) => false);
             },
-            title: const Text("LogOut!"),
+            title: Text(login ? ("Log Out") : ("Log In")),
+          ),
+          ListTile(
+            onTap: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) {
+                    // deviceMode = MediaQuery.of(context).orientation;
+                    return Padding(
+                      padding:
+                          EdgeInsets.all(((size.width > 500) ? (10.0) : (0.0))),
+                      child: Align(
+                        alignment: ((size.width > 500)
+                            ? (Alignment.center)
+                            : (Alignment.bottomCenter)),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: (size.width > 500) ? (500) : (size.width),
+                            height: (size.width > 500)
+                                ? (500)
+                                : (size.height * 0.68),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColorDark,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ExpandWidget(
+                                    heading: "Creator",
+                                    child: const ListTile(
+                                      title: Text("tanmaymudgal619"),
+                                    ),
+                                    expanded: true,
+                                  ),
+                                  ExpandWidget(
+                                    heading: "Contributor",
+                                    child: const ListTile(
+                                      title: Text("Riktam-Santra"),
+                                    ),
+                                    expanded: true,
+                                  ),
+                                  ExpandWidget(
+                                    heading: "Data Provided By",
+                                    child: const ListTile(
+                                      title: Text("Mangadex"),
+                                    ),
+                                    expanded: true,
+                                  ),
+                                  ExpandWidget(
+                                    heading: "Thanks",
+                                    child: const ListTile(
+                                      title: Text(
+                                        "We are thankful to mangadex to let us use their data without charges and helped Us whenever needed (through Discord) only because of their help we are able to complete this Project.\nWe also Respect every Author, Scanlator and Everyone who directly and indirectly helped us in the completion of the App.",
+                                      ),
+                                    ),
+                                    expanded: true,
+                                  ),
+                                  ExpandWidget(
+                                    heading: "Message For User",
+                                    child: const ListTile(
+                                      title: Text(
+                                          "Use our App for reading your favourite comics With time we will definately add more and more options for your better experience might even remove some.\nAnd to do so we need your feedback. So, if you found any error or have any suggestions then you can contact us on tanmaymudgal619@gmail.com."),
+                                    ),
+                                    expanded: true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+            },
+            title: const Text("Credits"),
           )
         ],
       ),

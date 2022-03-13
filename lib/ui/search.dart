@@ -38,12 +38,12 @@ class _SearchMangaState extends State<SearchManga> {
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: ((size.width > 500)
-                                  ? (size.width - size.width * 0.3)
+                                  ? (size.width - size.width * 0.15)
                                   : (size.width)) ~/
-                              105,
-                          childAspectRatio: 105 / 160,
-                          mainAxisSpacing: 20,
-                          crossAxisSpacing: 10,
+                              160,
+                          childAspectRatio: 160 / 200,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 15,
                         ),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, val) {

@@ -21,6 +21,7 @@ void get() {
   login = sharedPreferences.getBool("login")!;
   lang = sharedPreferences.getString("lang")!;
   dataSaver = sharedPreferences.getBool("dataSaver")!;
+  searchedManga.clear();
   if (login) {
     usr = User(
       sharedPreferences.getString("username")!,
