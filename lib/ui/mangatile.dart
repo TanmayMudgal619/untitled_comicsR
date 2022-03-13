@@ -53,9 +53,7 @@ class _MangaTileState extends State<MangaTile>
                         MangaPage(mangaOpened: widget.manga)));
           },
           onDoubleTap: () {
-            (size.width > 500)
-                ? (showmangaoverview(context, widget.manga))
-                : (showmangaoverview(context, widget.manga));
+            showmangaoverview(context, widget.manga);
           },
           child: Container(
             // width: 105,

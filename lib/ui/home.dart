@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
     ),
     (incognitoMode) ? (const LoginButton()) : (Library()),
-    (incognitoMode) ? (const LoginButton()) : (const Settings()),
+    const Settings(),
   ];
 
   @override
