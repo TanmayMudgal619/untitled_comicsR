@@ -55,28 +55,7 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                               ),
                             ),
                           ),
-                          // child: ListTile(
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //         context,
-                          //         CupertinoPageRoute(
-                          //             builder: (context) => Chapter(
-                          //                   chapter: e,
-                          //                 )));
-                          //   },
-                          //   leading: Icon(
-                          //     Icons.book,
-                          //     size: 50,
-                          //   ),
-                          //   title: Text(
-                          //     e.title,
-                          //   ),
-                          //   isThreeLine: true,
-                          //   subtitle: Text(
-                          //     "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
-                          //   ),
-                          // ),
-                          child: InkWell(
+                          child: ListTile(
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -85,36 +64,12 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                             chapter: e,
                                           )));
                             },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.book,
-                                  size: 75,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e.title,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 18),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Volume: ${e.volume}',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      'Chapter: ${e.chapter}',
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                )
-                              ],
+                            title: Text(
+                              e.title,
+                            ),
+                            isThreeLine: true,
+                            subtitle: Text(
+                              "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
                             ),
                           ),
                         ),

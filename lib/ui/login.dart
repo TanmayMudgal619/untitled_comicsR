@@ -133,7 +133,7 @@ class _LoginState extends State<Login> {
                               Navigator.pushReplacement(
                                 context,
                                 CupertinoPageRoute(
-                                  builder: (context) => const Loading(),
+                                  builder: (context) => Loading(),
                                 ),
                               );
                             }

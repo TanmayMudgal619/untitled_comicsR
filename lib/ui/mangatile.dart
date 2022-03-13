@@ -17,6 +17,13 @@ class MangaTile extends StatefulWidget {
 class _MangaTileState extends State<MangaTile>
     with SingleTickerProviderStateMixin {
   bool mouseEntered = false;
+  late AnimationController _animationController;
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 250));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +109,7 @@ class _MangaTileState extends State<MangaTile>
                             },
                             child: AnimatedContainer(
                               height: 20,
-                              width: mouseEntered ? 100 : 20,
+                              width: mouseEntered ? 150 : 20,
                               duration: const Duration(milliseconds: 200),
                               child: mouseEntered
                                   ? Container(
@@ -121,7 +128,7 @@ class _MangaTileState extends State<MangaTile>
                                       ),
                                       child: Center(
                                         child: Text(
-                                          ("${widget.manga.status[0].toUpperCase()}${widget.manga.status.substring(1).toLowerCase()}"),
+                                          widget.manga.status,
                                         ),
                                       ),
                                     )
