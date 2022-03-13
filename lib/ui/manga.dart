@@ -796,7 +796,7 @@ class _MangaBasedState extends State<MangaBased> {
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: ((size.width > 500)
-                          ? (size.width - size.width * 0.5)
+                          ? (size.width - size.width * 0.35)
                           : (size.width)) ~/
                       160,
                   childAspectRatio: 160 / 200,

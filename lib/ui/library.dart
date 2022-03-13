@@ -131,7 +131,7 @@ class _LibraryState extends State<Library> {
                         controller: e["scroll"],
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: ((size.width > 500)
-                                  ? (size.width - size.width * 0.3)
+                                  ? (size.width - size.width * 0.15)
                                   : (size.width)) ~/
                               160,
                           childAspectRatio: 160 / 200,

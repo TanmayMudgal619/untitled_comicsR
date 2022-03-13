@@ -21,50 +21,41 @@ class MangaRow extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, bottom: 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (context) =>
-                          ShowManga(title: title, mangas: mangaList)));
-                },
-                icon: const Icon(
-                  CupertinoIcons.forward,
-                ),
-              ),
-            ],
+        ListTile(
+          title: Text(
+            title,
+            style: const TextStyle(fontSize: 24),
           ),
-        ),
-        SizedBox(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: mangaList
-                  .sublist(0, 10)
-                  .map(
-                    (e) => Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: MangaTile(manga: e)),
-                  )
-                  .toList(),
+          trailing: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) =>
+                      ShowManga(title: title, mangas: mangaList)));
+            },
+            icon: const Icon(
+              CupertinoIcons.forward,
             ),
           ),
         ),
+        const SizedBox(
+          height: 20,
+        ),
+        GridView.builder(
+            primary: false,
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: ((size.width > 500)
+                      ? (size.width - size.width * 0.15)
+                      : (size.width)) ~/
+                  160,
+              childAspectRatio: 160 / 200,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
+            ),
+            itemCount: 10,
+            itemBuilder: (context, val) {
+              return MangaTile(manga: mangaList[val]);
+            }),
       ],
     );
   }
