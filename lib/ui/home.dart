@@ -71,7 +71,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     homepage[1] = SizedBox(
       child: SearchManga(),
     );
-    // deviceMode = MediaQuery.of(context).orientation;
     size = MediaQuery.of(context).size;
     return Scaffold(
       extendBody: true,
