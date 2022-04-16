@@ -28,6 +28,7 @@ class _MangaPageState extends State<MangaPage> {
   late Future<MangaStatistics> mangaStatisticsLoader;
   late MangaStatistics mangaStatistics;
   late Future<MangaAggregate> mangaAggregate;
+  late List<dynamic> chaptersReaded;
   String mangaReadingStatus = "none";
   // double rating = 0.0;
   @override
@@ -38,6 +39,12 @@ class _MangaPageState extends State<MangaPage> {
           mangaReadingStatus = status.key;
         }
       }
+      getReadChapters(widget.mangaOpened.id).then((value) {
+        setState(() {
+          print(value);
+          chaptersReaded = value;
+        });
+      });
     }
     mangaHeader = MangaHeader(
       manga: widget.mangaOpened,

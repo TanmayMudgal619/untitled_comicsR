@@ -55,27 +55,6 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                               ),
                             ),
                           ),
-                          // child: ListTile(
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //         context,
-                          //         CupertinoPageRoute(
-                          //             builder: (context) => Chapter(
-                          //                   chapter: e,
-                          //                 )));
-                          //   },
-                          //   leading: Icon(
-                          //     Icons.book,
-                          //     size: 50,
-                          //   ),
-                          //   title: Text(
-                          //     e.title,
-                          //   ),
-                          //   isThreeLine: true,
-                          //   subtitle: Text(
-                          //     "${e.scg}\nVolume: ${e.volume}\nChapter: ${e.chapter}",
-                          //   ),
-                          // ),
                           child: InkWell(
                             onTap: () {
                               Navigator.push(
@@ -85,43 +64,55 @@ class Manga_ChaptPageerState extends State<MangaPageChapter> {
                                             chapter: e,
                                           )));
                             },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.book,
-                                  size: 80,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e.title,
-                                      style: TextStyle(
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.book,
+                                    size: 80,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        e.title,
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 18),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Scanlation Group: ${e.scg}',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Volume: ${e.volume}',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Text(
-                                      'Chapter: ${e.chapter}',
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ],
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Scanlation Group: ${e.scg}',
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Volume: ${e.volume}',
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                      Text(
+                                        'Chapter: ${e.chapter}',
+                                        style: const TextStyle(fontSize: 12),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              trailing: Column(
+                                children: const [
+                                  Icon(
+                                    CupertinoIcons.eye_fill,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

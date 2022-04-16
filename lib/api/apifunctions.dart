@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/animation.dart';
+
 import 'classes.dart';
 import 'package:http/http.dart' as https;
 import 'dart:convert';
@@ -402,5 +404,20 @@ Future<void> setReadingStatus(String id, String status) async {
 
   if (response.statusCode != 200) {
     throw (Exception("${response.statusCode}"));
+  }
+}
+
+Future<List<dynamic>> getReadChapters(String id) async {
+  await usr.refreshSession();
+  var url = Uri.https("api.mangadex.org", "/manga/$id/read");
+  var result = await https.get(
+    url,
+    headers: {HttpHeaders.authorizationHeader: "Bearer ${usr.sessionToken}"},
+  );
+  if (result.statusCode == 200) {
+    var json = jsonDecode(result.body);
+    return json["data"];
+  } else {
+    throw Exception("Error Code: ${result.statusCode}");
   }
 }

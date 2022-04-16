@@ -63,19 +63,23 @@ class _ChapterState extends State<Chapter> {
                   child: Text("Error : ${snapshot.error.toString()}"),
                 );
               } else {
-                return ListView(
-                  children: ((dataSaver)
-                          ? (snapshot.data!.simages)
-                          : (snapshot.data!.images))
-                      .map(
-                        (e) => CachedNetworkImage(
-                            placeholder: (context, url) {
-                              return Image.asset("assets/images/logo.png");
-                            },
-                            imageUrl:
-                                "${snapshot.data!.baseUrl}/${(((dataSaver) ? ('data-saver') : ('data')))}/${snapshot.data!.hash}/$e"),
-                      )
-                      .toList(),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: ((dataSaver)
+                            ? (snapshot.data!.simages)
+                            : (snapshot.data!.images))
+                        .map(
+                          (e) => CachedNetworkImage(
+                              width: size.width,
+                              fit: BoxFit.fitWidth,
+                              placeholder: (context, url) {
+                                return Image.asset("assets/images/logo.png");
+                              },
+                              imageUrl:
+                                  "${snapshot.data!.baseUrl}/${(((dataSaver) ? ('data-saver') : ('data')))}/${snapshot.data!.hash}/$e"),
+                        )
+                        .toList(),
+                  ),
                 );
               }
           }

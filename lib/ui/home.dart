@@ -438,8 +438,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 showCupertinoModalPopup(
                                     context: context,
                                     builder: (context) {
-                                      // deviceMode =
-                                      //     MediaQuery.of(context).orientation;
                                       return Padding(
                                         padding: EdgeInsets.all(
                                             ((size.width > 500)
