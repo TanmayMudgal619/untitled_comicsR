@@ -24,6 +24,8 @@ Our project is Open-Source so if you want to help then You're Welcomed!
 <img src = "https://github.com/TanmayMudgal619/untitled_comicsR/blob/main/example/Screenshot_2022-06-11-10-19-35-79_822ce6453e807ea2638c24a694fb9fa8.jpg" width = 350px>
 <img src = "https://github.com/TanmayMudgal619/untitled_comicsR/blob/main/example/Screenshot_2022-06-11-10-21-37-09_822ce6453e807ea2638c24a694fb9fa8.jpg" width = 350px>
 
+# Clips
+<video src ="https://github.com/TanmayMudgal619/untitled_comicsR/blob/main/example/Record_2022-06-11-10-23-00_822ce6453e807ea2638c24a694fb9fa8.mp4">
 
 # Message to User
 Bugs are expected So if you find one then it'll be great if you can inform us.
