@@ -11,6 +11,7 @@ Our project is Open-Source so if you want to help then You're Welcomed!
 * Select Your Preffered Language for Chapters.
 * Get Manga Based On Manga you are Reading.
 * Check Rating.
+* The Theme changes itself by the Theme of your system(Light and Dark Themes).
 
 # Upcoming Features
 * Filters on Search.
