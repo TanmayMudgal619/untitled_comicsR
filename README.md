@@ -3,6 +3,9 @@ An Application for Mangadex Users can be used over Android, Windows and even on 
 
 Our project is Open-Source so if you want to help then You're Welcomed!
 
+# Latest Release
+https://github.com/TanmayMudgal619/untitled_comicsR/releases/tag/v1.0
+
 # Features
 * Login Your Mangadex Account or Use Incognito Mode.
 * You can Search your favourite Manga(Can also search even if you don't like the manga).
