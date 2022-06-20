@@ -5,6 +5,9 @@ Our project is Open-Source so if you want to help then You're Welcomed!
 
 # Latest Release
 https://github.com/TanmayMudgal619/untitled_comicsR/releases/tag/v1.0
+Android: https://github.com/TanmayMudgal619/untitled_comicsR/releases/download/v1.0/app-release.zip
+Windows: https://github.com/TanmayMudgal619/untitled_comicsR/releases/download/v1.0/windows-release.zip
+Linux:   https://github.com/TanmayMudgal619/untitled_comicsR/releases/download/v1.0/linux-release.zip
 
 # Features
 * Login Your Mangadex Account or Use Incognito Mode.
