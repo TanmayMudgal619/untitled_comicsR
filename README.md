@@ -34,7 +34,7 @@ Linux:   https://github.com/TanmayMudgal619/untitled_comicsR/releases/download/v
 <img src = "https://github.com/TanmayMudgal619/untitled_comicsR/blob/main/example/Screenshot_2022-06-11-10-21-37-09_822ce6453e807ea2638c24a694fb9fa8.jpg" width = 350px>
 
 # Message to User
-Bugs are expected So if you find one then it'll be great if you can inform us.
+Bugs are expected So if you find one then it'll be great if you can inform us at tanmaymudgal619@gmail.com.
 
 If You have any feature which can be added then please tell us we'll try to add it.
 
