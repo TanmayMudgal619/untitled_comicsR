@@ -3,6 +3,9 @@ An Application for Mangadex Users can be used over Android, Windows and even on 
 
 Our project is Open-Source so if you want to help then You're Welcomed!
 
+# Important Note
+Due to change in API current release do not work but don't worry the code will be updated soon.
+
 # Latest Release
 https://github.com/TanmayMudgal619/untitled_comicsR/releases/tag/v1.0
 
